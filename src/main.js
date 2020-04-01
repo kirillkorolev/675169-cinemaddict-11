@@ -71,12 +71,12 @@ const createFilmsElement = () => {
 
 const createExtrasElement = () => {
   return `
-    <section class="films-list--extra-rated">
+    <section class="films-list--extra films-list--extra-rated">
       <h2 class="films-list__title">Top rated</h2>
 
       <div class="films-list__container"></div>
     </section>
-    <section class="films-list--extra-commented">
+    <section class="films-list--extra films-list--extra-commented">
       <h2 class="films-list__title">Most commented</h2>
 
       <div class="films-list__container"></div>
@@ -84,6 +84,7 @@ const createExtrasElement = () => {
   `;
 };
 
+/*
 const createFilmPopup = () => {
   return `
     <section class="film-details">
@@ -257,6 +258,7 @@ const createFilmPopup = () => {
   </section>
   `;
 };
+*/
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -269,14 +271,17 @@ render(siteHeaderElement, createUserStatusTemplate(), `beforeend`);
 render(siteMainElement, createMenuTemplate(), `beforeend`);
 render(siteMainElement, createFilmsElement(), `beforeend`);
 
-const filmsElement = siteMainElement.querySelector(`.films-list`);
-const filmsListElement = filmsElement.querySelector(`.films-list__container`);
+const filmsElement = siteMainElement.querySelector(`.films`);
+const allFilmsElement = siteMainElement.querySelector(`.films-list`);
+const filmsListElement = filmsElement.querySelector(
+  `.films-list .films-list__container`
+);
 
 for (let i = 0; i < FILM_COUNT; i++) {
   render(filmsListElement, createFilmCardTemplate(), `beforeend`);
 }
 
-render(filmsElement, createLoadMoreButtonTemplate(), `beforeend`);
+render(allFilmsElement, createLoadMoreButtonTemplate(), `beforeend`);
 render(filmsElement, createExtrasElement(), `beforeend`);
 
 const topRatedFilmsListElement = filmsElement.querySelector(
