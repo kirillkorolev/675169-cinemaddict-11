@@ -13,6 +13,15 @@ const posters = [
   `the-man-with-the-golden-arm.jpg`
 ];
 
+const originalTitle = `The Great Flamarion`;
+const directorName = `Anthony Mann`;
+const writers = `Anne Wigton, Heinz Herald, Richard Weil`;
+const actors = `Erich von Stroheim, Mary Beth Hughes, Dan Duryea`;
+const releaseDate = `30 March 1945`;
+const country = `USA`;
+const ageRaiting = `18+`;
+
+
 const descriptionArr = descriptionText.split(`. `);
 const MAX_TEXT_LENGTH = 140;
 
@@ -48,7 +57,15 @@ const generateCard = () => {
     genre: genreList[randomElement(genreList)],
     description: createFullDescription(descriptionArr),
     poster: posters[randomElement(posters)],
-    commentsAmmount: randomInteger(0, 5)
+    commentsAmmount: randomInteger(0, 5),
+
+    original: originalTitle,
+    director: directorName,
+    writersNames: writers,
+    actorsNames: actors,
+    realease: releaseDate,
+    countryBirth: country,
+    ageCategory: ageRaiting,
   };
 };
 
