@@ -1,5 +1,4 @@
 import {randomElement, randomInteger} from "../utils.js";
-import {createCommentMarkup} from "./components/comment";
 
 const avatarsList = [`smile`, `sleeping`, `puke`, `angry`];
 const nameList = [`Tim Macoveev`, `John Doe`, `Henry Rollins`, `Yan McKay`, `Glen Danzig`];
@@ -15,9 +14,10 @@ const generateComment = () => {
   };
 };
 
-const generateComments = (count) => {
-  let abc = new Array(count).fill(``).map(generateComment);
-  return abc.map((it) => createCommentMarkup(it)).join(`\n`);
+const generateCommentsArray = (count) => {
+  let arr = new Array(count).fill(``).map(generateComment);
+  return arr;
 };
 
-export {generateComments};
+export {generateCommentsArray};
+
