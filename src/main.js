@@ -17,8 +17,7 @@ import PopupComponent from "./components/popup.js";
 import CommentComponent from "./components/comment.js";
 import {RenderPosition, render} from "./utils";
 
-
-const FILM_COUNT = 11;
+const FILM_COUNT = 0;
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 const EXTRAS_COUNT = 2;
@@ -104,36 +103,31 @@ const renderFilms = (filmsElement, cards) => {
   });
 };
 
-const filmsSectionElement = new FilmsComponent();
-const noFilmsElement = new NoFilmsComponent();
-const noFilmsStatisticElement = new NoFilmsStatistic();
-
 const cardsMocks = generateCards(FILM_COUNT);
+const filmsSectionElement = new FilmsComponent();
 
 if (cardsMocks.length > 0) {
   render(siteMainElement, filmsSectionElement.getElement(), RenderPosition.BEFOREEND);
-} else {
-  render(siteMainElement, noFilmsElement.getElement(), RenderPosition.BEFOREEND);
-  render(siteFooterElement, noFilmsStatisticElement.getElement(), RenderPosition.BEFOREEND)
-}
+  renderFilms(filmsSectionElement, cardsMocks);
 
-renderFilms(filmsSectionElement, cardsMocks);
+  const ratedFilms = new RatedFilmsComponent();
+  const commentedFilms = new CommentedFilmsComponent();
 
-const ratedFilms = new RatedFilmsComponent();
-const commentedFilms = new CommentedFilmsComponent();
+  const extrasMocks = cardsMocks.slice(0, EXTRAS_COUNT);
+  const renderExtrasFilms = (filmsListElement, cards) => {
+    cards.forEach((card) => renderPopupsAndCarts(filmsListElement, card));
+  };
 
-const extrasMocks = cardsMocks.slice(0, 2);
-const renderExtrasFilms = (filmsListElement, cards) => {
-  cards.forEach((card) => renderPopupsAndCarts(filmsListElement, card));
-};
 
-if (cardsMocks.length > 0) {
   render(filmsSectionElement.getElement(), ratedFilms.getElement(), RenderPosition.BEFOREEND);
   render(filmsSectionElement.getElement(), commentedFilms.getElement(), RenderPosition.BEFOREEND);
 
   renderExtrasFilms(ratedFilms.getElement().querySelector(`.films-list__container`), extrasMocks);
   renderExtrasFilms(commentedFilms.getElement().querySelector(`.films-list__container`), extrasMocks);
-
+} else {
+  const noFilmsElement = new NoFilmsComponent();
+  const noFilmsStatisticElement = new NoFilmsStatistic();
+  render(siteMainElement, noFilmsElement.getElement(), RenderPosition.BEFOREEND);
+  render(siteFooterElement, noFilmsStatisticElement.getElement(), RenderPosition.BEFOREEND);
 }
-
 
