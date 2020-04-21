@@ -1,18 +1,17 @@
 import {createElement} from "../utils.js";
 
-const createNoFilmsStatictic = () => {
-  return (`<section class="footer__statistics">
-  <p>0 movies inside</p>
-</section>`);
+const createFilmsStatictic = (ammount) => {
+  return (`<p>${ammount} movies inside</p>`);
 };
 
-export default class NoFilmsStatictic {
-  constructor() {
+export default class FilmsStatistic {
+  constructor(ammount) {
+    this._ammount = ammount;
     this._element = null;
   }
 
   getTemplate() {
-    return createNoFilmsStatictic();
+    return createFilmsStatictic(this._ammount);
   }
 
   getElement() {
