@@ -15,8 +15,7 @@ const generateComment = () => {
 };
 
 const generateCommentsArray = (count) => {
-  let arr = new Array(count).fill(``).map(generateComment);
-  return arr;
+  return new Array(count).fill(``).map(generateComment);
 };
 
 export {generateCommentsArray};
