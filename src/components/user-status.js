@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component.js";
 
 const createUserStatusTemplate = (info) => {
   const {status} = info;
@@ -9,26 +9,14 @@ const createUserStatusTemplate = (info) => {
 </section>`);
 };
 
-export default class Status {
+export default class Status extends AbstractComponent {
   constructor(info) {
-    this._info = info;
+    super();
 
-    this._element = null;
+    this._info = info;
   }
 
   getTemplate() {
     return createUserStatusTemplate(this._info);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
