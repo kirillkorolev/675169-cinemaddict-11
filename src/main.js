@@ -11,7 +11,6 @@ import FilmsComponent from "./components/films.js";
 import NoFilmsComponent from "./components/no-films.js";
 import FilmsStatistic from "./components/films-statistic.js";
 
-
 import RatedFilmsComponent from "./components/rated-films.js";
 import CommentedFilmsComponent from "./components/commented-films.js";
 
@@ -19,8 +18,7 @@ import CommentedFilmsComponent from "./components/commented-films.js";
 import {RenderPosition, render} from "./utils/render.js";
 
 const FILM_COUNT = 11;
-
-// const EXTRAS_COUNT = 2;
+const EXTRAS_COUNT = 2;
 
 const categories = generateCategories();
 
@@ -34,35 +32,35 @@ render(siteHeaderElement, new StatusComponent(info), RenderPosition.BEFOREEND);
 render(siteMainElement, new MenuComponent(categories), RenderPosition.BEFOREEND);
 render(siteMainElement, new SortComponent(), RenderPosition.BEFOREEND);
 
-const FilmsStatisticElement = new FilmsStatistic(FILM_COUNT);
+const FilmsStatisticComponent = new FilmsStatistic(FILM_COUNT);
 
 const siteStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
-render(siteStatisticElement, FilmsStatisticElement, RenderPosition.BEFOREEND);
+render(siteStatisticElement, FilmsStatisticComponent, RenderPosition.BEFOREEND);
 
 const cardsMocks = generateCards(FILM_COUNT);
-const filmsSectionElement = new FilmsComponent();
-const pageController = new PageController(filmsSectionElement);
+
+const filmsSectionComponent = new FilmsComponent();
+
+const pageController = new PageController(filmsSectionComponent);
 
 if (cardsMocks.length > 0) {
-  render(siteMainElement, filmsSectionElement, RenderPosition.BEFOREEND);
+
+  render(siteMainElement, filmsSectionComponent, RenderPosition.BEFOREEND);
   pageController.render(cardsMocks);
 
   const ratedFilms = new RatedFilmsComponent();
   const commentedFilms = new CommentedFilmsComponent();
+  const extrasMocks = cardsMocks.slice(0, EXTRAS_COUNT);
 
-  // const extrasMocks = cardsMocks.slice(0, EXTRAS_COUNT);
-  // const renderExtrasFilms = (filmsListElement, cards) => {
-  //   cards.forEach((card) => renderPopupsAndCarts(filmsListElement, card));
-  // };
+  render(filmsSectionComponent.getElement(), ratedFilms, RenderPosition.BEFOREEND);
+  render(filmsSectionComponent.getElement(), commentedFilms, RenderPosition.BEFOREEND);
 
-  render(filmsSectionElement.getElement(), ratedFilms, RenderPosition.BEFOREEND);
-  render(filmsSectionElement.getElement(), commentedFilms, RenderPosition.BEFOREEND);
-
-  // renderExtrasFilms(ratedFilms.getElement().querySelector(`.films-list__container`), extrasMocks);
-  // renderExtrasFilms(commentedFilms.getElement().querySelector(`.films-list__container`), extrasMocks);
+  const ratedFilmsController = new PageController(ratedFilms);
+  const commentedFilmsController = new PageController(commentedFilms);
+  ratedFilmsController.render(extrasMocks);
+  commentedFilmsController.render(extrasMocks);
 } else {
   const noFilmsElement = new NoFilmsComponent();
-  render(siteMainElement, noFilmsElement.getElement(), RenderPosition.BEFOREEND);
-
+  render(siteMainElement, noFilmsElement, RenderPosition.BEFOREEND);
 }
 

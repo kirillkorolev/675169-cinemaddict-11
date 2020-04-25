@@ -3,14 +3,12 @@ import FilmCardComponent from "../components/film-card.js";
 import CommentComponent from "../components/comment.js";
 import LoadMoreButtonComponent from "../components/load-more-button.js";
 
-import {generateCommentsArray} from "../mock/comment";
-
 import {RenderPosition, render, remove} from "../utils/render.js";
 
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 
-const renderPopupsAndCarts = (filmList, card) => {
+const renderPopupsAndCards = (filmList, card) => {
   const siteFooterElement = document.querySelector(`.footer`);
 
   const removePopup = () => {
@@ -37,9 +35,7 @@ const renderPopupsAndCarts = (filmList, card) => {
   const onPosterClick = () => {
     siteFooterElement.appendChild(popupComponent.getElement());
 
-    const commentsAmmount = card.commentsAmmount;
-    const commentsArray = generateCommentsArray(commentsAmmount);
-
+    const commentsArray = card.commentsArray;
     commentsArray.forEach((comment) => {
       render(commentsList, new CommentComponent(comment), RenderPosition.BEFOREEND);
     });
@@ -53,39 +49,33 @@ const renderPopupsAndCarts = (filmList, card) => {
   render(filmList, cardComponent, RenderPosition.BEFOREEND);
 };
 
-const renderFilms = (filmsElement, cards) => {
-
-  const filmsListElement = filmsElement.getElement().querySelector(`.films-list__container`);
-  let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
-
-  cards.slice(0, showingFilmsCount).forEach((card) => renderPopupsAndCarts(filmsListElement, card));
-
-  const loadMoreButtonComponent = new LoadMoreButtonComponent();
-
-  if (cards.length > 0) {
-    render(filmsElement.getElement(), loadMoreButtonComponent, RenderPosition.BEFOREEND);
-  }
-
-  loadMoreButtonComponent.setClickHandler(() => {
-    const prevFilmsCount = showingFilmsCount;
-    showingFilmsCount = prevFilmsCount + SHOWING_FILMS_COUNT_BY_BUTTON;
-
-    cards.slice(prevFilmsCount, showingFilmsCount).forEach((card) => renderPopupsAndCarts(filmsListElement, card));
-
-    if (showingFilmsCount >= cards.length) {
-      remove(loadMoreButtonComponent);
-    }
-  });
-};
-
 export default class PageController {
   constructor(container) {
     this._container = container;
 
+    this._loadMoreButtonComponent = new LoadMoreButtonComponent();
   }
 
   render(films) {
-    renderFilms(this._container, films);
-  }
+    const container = this._container.getElement();
 
+    const filmsListElement = container.querySelector(`.films-list__container`);
+    let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
+    films.slice(0, showingFilmsCount).forEach((card) => renderPopupsAndCards(filmsListElement, card));
+
+    if (films.length > 0) {
+      render(container, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
+    }
+
+    this._loadMoreButtonComponent.setClickHandler(() => {
+      const prevFilmsCount = showingFilmsCount;
+      showingFilmsCount = prevFilmsCount + SHOWING_FILMS_COUNT_BY_BUTTON;
+
+      films.slice(prevFilmsCount, showingFilmsCount).forEach((card) => renderPopupsAndCards(filmsListElement, card));
+
+      if (showingFilmsCount >= films.length) {
+        remove(this._loadMoreButtonComponent);
+      }
+    });
+  }
 }

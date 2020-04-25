@@ -1,4 +1,5 @@
 import {randomElement, randomInteger, shuffle} from "../utils.js";
+import {generateCommentsArray} from "../mock/comment";
 
 const FILM_TITLES = [`The dance of life`, `Santa Clasus`, `Popey the Sailor`, `Terminator`, `Taxi`, `Lucky 7`, `Shining`];
 const descriptionText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus. `;
@@ -49,6 +50,8 @@ const randomRaiting = () => (Math.random() * 10).toFixed(1);
 const randomDuration = () => randomInteger(0, 3) + `h ` + randomInteger(0, 59) + `m`;
 
 const generateCard = () => {
+  let number = randomInteger(0, 5);
+
   return {
     title: FILM_TITLES[randomElement(FILM_TITLES)],
     raiting: randomRaiting(),
@@ -57,7 +60,8 @@ const generateCard = () => {
     genre: genreList[randomElement(genreList)],
     description: createFullDescription(descriptionArr),
     poster: posters[randomElement(posters)],
-    commentsAmmount: randomInteger(0, 5),
+    commentsAmmount: number,
+    commentsArray: generateCommentsArray(number),
 
     original: originalTitle,
     director: directorName,
