@@ -1,7 +1,7 @@
 import AbstractComponent from "./abstract-component.js";
 
 const createFilmPopup = (card) => {
-  const {title, duration, poster, description, raiting, commentsAmmount} = card;
+  const {title, duration, poster, description, raiting, commentsArray} = card;
 
   const originalTitle = `The Great Flamarion`;
   const directorName = `Anthony Mann`;
@@ -81,7 +81,7 @@ const createFilmPopup = (card) => {
     </div>
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsAmmount}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsArray.length}</span></h3>
         <ul class="film-details__comments-list">
         </ul>
         <div class="film-details__new-comment">

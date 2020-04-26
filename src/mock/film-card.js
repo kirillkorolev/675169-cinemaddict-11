@@ -50,8 +50,6 @@ const randomRaiting = () => (Math.random() * 10).toFixed(1);
 const randomDuration = () => randomInteger(0, 3) + `h ` + randomInteger(0, 59) + `m`;
 
 const generateCard = () => {
-  let number = randomInteger(0, 5);
-
   return {
     title: FILM_TITLES[randomElement(FILM_TITLES)],
     raiting: randomRaiting(),
@@ -60,8 +58,7 @@ const generateCard = () => {
     genre: genreList[randomElement(genreList)],
     description: createFullDescription(descriptionArr),
     poster: posters[randomElement(posters)],
-    commentsAmmount: number,
-    commentsArray: generateCommentsArray(number),
+    commentsArray: generateCommentsArray(randomInteger(0, 5)),
 
     original: originalTitle,
     director: directorName,
