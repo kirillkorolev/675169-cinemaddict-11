@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createCategorieMarkup = (categorie, isChecked) => {
   const {categorieName, count} = categorie;
@@ -23,24 +23,14 @@ const createMenuTemplate = (categories) => {
     </ul>`);
 };
 
-export default class Menu {
+export default class Menu extends AbstractComponent {
   constructor(categories) {
+    super();
+
     this._categories = categories;
-    this._element = null;
   }
 
   getTemplate() {
     return createMenuTemplate(this._categories);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
