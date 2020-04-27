@@ -58,7 +58,7 @@ const generateCard = () => {
     genre: genreList[randomElement(genreList)],
     description: createFullDescription(descriptionArr),
     poster: posters[randomElement(posters)],
-    commentsArray: generateCommentsArray(randomInteger(0, 5)),
+    comments: generateCommentsArray(randomInteger(0, 5)),
 
     original: originalTitle,
     director: directorName,

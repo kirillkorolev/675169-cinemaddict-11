@@ -5,7 +5,7 @@ import {generateCategories} from "./mock/menu";
 import PageController from "./controllers/page.js";
 import StatusComponent from "./components/user-status.js";
 import MenuComponent from "./components/menu.js";
-import SortComponent from "./components/sort.js";
+
 import FilmsComponent from "./components/films.js";
 import NoFilmsComponent from "./components/no-films.js";
 import FilmsStatistic from "./components/films-statistic.js";
@@ -30,7 +30,6 @@ const siteFooterElement = document.querySelector(`.footer`);
 
 render(siteHeaderElement, new StatusComponent(info), RenderPosition.BEFOREEND);
 render(siteMainElement, new MenuComponent(categories), RenderPosition.BEFOREEND);
-render(siteMainElement, new SortComponent(), RenderPosition.BEFOREEND);
 
 const cardsMocks = generateCards(FILM_COUNT);
 const filmsSectionComponent = new FilmsComponent();
@@ -40,11 +39,10 @@ const FilmsStatisticElement = new FilmsStatistic(FILM_COUNT);
 
 const siteStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 render(siteStatisticElement, FilmsStatisticElement, RenderPosition.BEFOREEND);
-
+pageController.render(cardsMocks);
 
 if (cardsMocks.length > 0) {
   render(siteMainElement, filmsSectionComponent, RenderPosition.BEFOREEND);
-  pageController.render(cardsMocks);
 
   const ratedFilmsComponent = new RatedFilmsComponent();
   const commentedFilmsComponent = new CommentedFilmsComponent();

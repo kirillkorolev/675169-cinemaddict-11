@@ -1,16 +1,16 @@
 import AbstractComponent from "./abstract-component.js";
 
 export const SortType = {
-  DATE_DOWN: `date-down`,
-  RAITING_UP: `raiting-up`,
   DEFAULT: `default`,
+  DATE_DOWN: `date-down`,
+  RAITING_DOWN: `raiting-down`,
 };
 
 const createSortMenuTemplate = () => {
   return (`<ul class="sort">
   <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button sort__button--active">Sort by default</a></li>
   <li><a href="#" data-sort-type="${SortType.DATE_DOWN}" class="sort__button">Sort by date</a></li>
-  <li><a href="#" data-sort-type="${SortType.RAITING_UP}" class="sort__button">Sort by rating</a></li>
+  <li><a href="#" data-sort-type="${SortType.RAITING_DOWN}" class="sort__button">Sort by rating</a></li>
 </ul>`);
 };
 
@@ -37,7 +37,10 @@ export default class SortMenu extends AbstractComponent {
         return;
       }
 
+      this.getElement().querySelector(`.sort__button--active`).classList.remove(`sort__button--active`);
+
       const sortType = evt.target.dataset.sortType;
+      evt.target.classList.add(`sort__button--active`);
 
       if (this._currenSortType === sortType) {
         return;
