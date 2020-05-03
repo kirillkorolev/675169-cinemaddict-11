@@ -8,7 +8,7 @@ const siteFooterElement = document.querySelector(`.footer`);
 
 const Mode = {
   DEFAULT: `default`,
-  OPENEDPOPUP: `opened popup`,
+  OPENEDPOPUP: `opened`,
 };
 
 
@@ -85,7 +85,6 @@ export default class MovieController {
     siteFooterElement.removeChild(this._popupComponent.getElement());
     this._popupComponent.clearComments();
     this._popupComponent.clearAvatarInComment();
-
     this._mode = Mode.DEFAULT;
   }
 
@@ -98,11 +97,16 @@ export default class MovieController {
     }
   }
 
+  _closeAllPopups() {
+    this._mode = Mode.DEFAULT;
+
+    this._popupComponent.removeElement();
+    this._popupComponent.rerender();
+  }
+
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-
-      this._removePopup();
-      this._popupComponent.rerender();
+      this._closeAllPopups();
     }
   }
 }

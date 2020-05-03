@@ -151,6 +151,10 @@ export default class PageController {
     movieController.render(this._films[index]);
   }
 
+  _onViewChange() {
+    this._showedMovieControllers.forEach((it) => it.setDefaultView());
+  }
+
   _onSortTypeChange(sortType) {
     const container = this._container.getElement();
     const filmsListElement = container.querySelector(`.films-list__container`);
@@ -163,9 +167,5 @@ export default class PageController {
     this._showedMovieControllers = this._showedMovieControllers.concat(newFilms);
 
     this._renderLoadMoreButton(sortedFilms);
-  }
-
-  _onViewChange() {
-    this._showedMovieControllers.forEach((it) => it.setDefaultView());
   }
 }
