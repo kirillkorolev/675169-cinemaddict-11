@@ -1,7 +1,8 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
+// import {render, RenderPosition} from "../utils/render.js";
 
 const createFilmPopup = (card) => {
-  const {title, duration, poster, description, raiting, comments} = card;
+  const {title, duration, poster, description, rating, comments} = card;
 
   const originalTitle = `The Great Flamarion`;
   const directorName = `Anthony Mann`;
@@ -29,7 +30,7 @@ const createFilmPopup = (card) => {
               <p class="film-details__title-original">Original: ${originalTitle}</p>
             </div>
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${raiting}</p>
+              <p class="film-details__total-rating">${rating}</p>
             </div>
           </div>
           <table class="film-details__table">
@@ -114,7 +115,7 @@ const createFilmPopup = (card) => {
 </section>`);
 };
 
-export default class Popup extends AbstractComponent {
+export default class Popup extends AbstractSmartComponent {
   constructor(card) {
     super();
 
@@ -125,7 +126,71 @@ export default class Popup extends AbstractComponent {
     return createFilmPopup(this._card);
   }
 
+  clearComments() {
+    this.getElement().querySelector(`.film-details__comments-list`).innerHTML = ``;
+  }
+
+  recoveryListeners() {
+    this.setOnCloseButtonClickHandler(this._submitHandler);
+    this._subscribeOnEvents();
+    this._setOnEmojiClickHandler();
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
   setOnCloseButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
+  }
+
+  setOnEmojiClickHandler() {
+    const emojilist = this.getElement().querySelector(`.film-details__emoji-list`);
+    const newComment = this.getElement().querySelector(`.film-details__new-comment`);
+
+    const newCommentAvatar = newComment.querySelector(`.film-details__add-emoji-label`);
+    emojilist.addEventListener(`click`, (evt) => {
+      if (evt.target.closest(`img`)) {
+        const avatar = evt.target.closest(`img`).cloneNode(true);
+        avatar.style.width = `55px`;
+        avatar.style.height = `55px`;
+
+        if (newCommentAvatar.children.length === 0) {
+          newCommentAvatar.appendChild(avatar);
+        }
+
+        if (newCommentAvatar.children.length === 1) {
+          newCommentAvatar.replaceChild(avatar, newCommentAvatar.querySelector(`img`));
+        }
+      }
+    });
+  }
+
+  clearAvatarInComment() {
+    const addingComment = this.getElement().querySelector(`.film-details__add-emoji-label`);
+    const avatar = addingComment.querySelector(`img`);
+
+    if (addingComment.contains(avatar)) {
+      addingComment.removeChild(avatar);
+    }
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`#watchlist`).addEventListener(`click`, () => {
+
+      this.rerender();
+    });
+
+    element.querySelector(`#watched`).addEventListener(`click`, () => {
+
+      this.rerender();
+    });
+
+    element.querySelector(`#watched`).addEventListener(`click`, () => {
+
+      this.rerender();
+    });
   }
 }

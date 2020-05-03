@@ -9,7 +9,7 @@ import MenuComponent from "./components/menu.js";
 import FilmsComponent from "./components/films.js";
 import NoFilmsComponent from "./components/no-films.js";
 import FilmsStatistic from "./components/films-statistic.js";
-import {renderPopupsAndCards} from "./controllers/page.js";
+// import {renderPopupsAndCards} from "./controllers/page.js";
 
 import RatedFilmsComponent from "./components/rated-films.js";
 import CommentedFilmsComponent from "./components/commented-films.js";
@@ -18,7 +18,7 @@ import CommentedFilmsComponent from "./components/commented-films.js";
 import {RenderPosition, render} from "./utils/render.js";
 
 const FILM_COUNT = 11;
-const EXTRAS_COUNT = 2;
+// const EXTRAS_COUNT = 2;
 
 const categories = generateCategories();
 
@@ -47,17 +47,17 @@ if (cardsMocks.length > 0) {
   const ratedFilmsComponent = new RatedFilmsComponent();
   const commentedFilmsComponent = new CommentedFilmsComponent();
 
-  const extrasMocks = cardsMocks.slice(0, EXTRAS_COUNT);
+  // const extrasMocks = cardsMocks.slice(0, EXTRAS_COUNT);
 
-  const renderExtrasFilms = (filmsListElement, cards) => {
-    cards.forEach((card) => renderPopupsAndCards(filmsListElement, card));
-  };
+  // const renderExtrasFilms = (filmsListElement, cards) => {
+  //   cards.forEach((card) => renderPopupsAndCards(filmsListElement, card));
+  // };
 
   render(filmsSectionComponent.getElement(), ratedFilmsComponent, RenderPosition.BEFOREEND);
   render(filmsSectionComponent.getElement(), commentedFilmsComponent, RenderPosition.BEFOREEND);
 
-  renderExtrasFilms(ratedFilmsComponent.getElement().querySelector(`.films-list__container`), extrasMocks);
-  renderExtrasFilms(commentedFilmsComponent.getElement().querySelector(`.films-list__container`), extrasMocks);
+  // renderExtrasFilms(ratedFilmsComponent.getElement().querySelector(`.films-list__container`), extrasMocks);
+  // renderExtrasFilms(commentedFilmsComponent.getElement().querySelector(`.films-list__container`), extrasMocks);
 } else {
   const noFilmsComponent = new NoFilmsComponent();
   render(siteMainElement, noFilmsComponent, RenderPosition.BEFOREEND);
