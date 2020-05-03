@@ -60,9 +60,9 @@ const generateCard = () => {
     poster: posters[randomElement(posters)],
     comments: generateCommentsArray(randomInteger(0, 5)),
 
-    isInWatchList: true,
-    isInWatchedList: true,
-    isInFavouriteList: true,
+    isInWatchList: false,
+    isInWatchedList: false,
+    isInFavouriteList: false,
 
     original: originalTitle,
     director: directorName,

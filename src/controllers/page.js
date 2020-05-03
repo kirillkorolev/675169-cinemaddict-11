@@ -141,7 +141,6 @@ export default class PageController {
 
   _onDataChange(movieController, oldData, newData) {
     const index = this._films.findIndex((it) => it === oldData);
-
     if (index === -1) {
       return;
     }

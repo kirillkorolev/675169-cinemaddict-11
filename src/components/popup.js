@@ -120,6 +120,7 @@ export default class Popup extends AbstractSmartComponent {
     super();
 
     this._card = card;
+    this._setOnEmojiClickHandler();
   }
 
   getTemplate() {
@@ -144,7 +145,7 @@ export default class Popup extends AbstractSmartComponent {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
   }
 
-  setOnEmojiClickHandler() {
+  _setOnEmojiClickHandler() {
     const emojilist = this.getElement().querySelector(`.film-details__emoji-list`);
     const newComment = this.getElement().querySelector(`.film-details__new-comment`);
 

@@ -2,7 +2,7 @@ import PopupComponent from "../components/popup.js";
 import FilmCardComponent from "../components/film-card.js";
 import CommentComponent from "../components/comment.js";
 
-import {RenderPosition, render} from "../utils/render.js";
+import {RenderPosition, render, replace} from "../utils/render.js";
 
 const siteFooterElement = document.querySelector(`.footer`);
 
@@ -27,12 +27,16 @@ export default class MovieController {
   }
 
   render(movie) {
+
+    const oldMovie = this._cardComponent;
+
     this._cardComponent = new FilmCardComponent(movie);
     this._popupComponent = new PopupComponent(movie);
 
     const commentsList = this._popupComponent.getElement().querySelector(`.film-details__comments-list`);
 
     const onPosterClick = () => {
+      this._onViewChange();
       siteFooterElement.appendChild(this._popupComponent.getElement());
 
       const comments = movie.comments;
@@ -50,21 +54,17 @@ export default class MovieController {
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    this._popupComponent.setOnEmojiClickHandler();
-
     this._cardComponent.setWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
-
       this._onDataChange(this, movie, Object.assign({}, movie, {
-        isInWatchList: false,
+        isInWatchList: !movie.isInWatchList,
       }));
     });
 
     this._cardComponent.setWatchedButtonClickHandler((evt) => {
       evt.preventDefault();
-
       this._onDataChange(this, movie, Object.assign({}, movie, {
-        isInWatchedList: false,
+        isInWatchedList: !movie.isInWatchedList,
       }));
     });
 
@@ -72,13 +72,17 @@ export default class MovieController {
       evt.preventDefault();
 
       this._onDataChange(this, movie, Object.assign({}, movie, {
-        isInFavouriteList: false,
+        isInFavouriteList: !movie.isInFavouriteList,
       }));
     });
 
     this._cardComponent.setOnPosterClickHandler(onPosterClick);
 
-    render(this._container, this._cardComponent, RenderPosition.BEFOREEND);
+    if (oldMovie) {
+      replace(this._cardComponent, oldMovie);
+    } else {
+      render(this._container, this._cardComponent, RenderPosition.BEFOREEND);
+    }
   }
 
   _removePopup() {
@@ -97,16 +101,15 @@ export default class MovieController {
     }
   }
 
-  _closeAllPopups() {
+  _closePopup() {
     this._mode = Mode.DEFAULT;
 
-    this._popupComponent.removeElement();
-    this._popupComponent.rerender();
+    this._popupComponent.getElement().remove();
   }
 
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._closeAllPopups();
+      this._closePopup();
     }
   }
 }

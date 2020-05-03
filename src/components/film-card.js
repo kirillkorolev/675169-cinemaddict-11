@@ -15,9 +15,9 @@ const createFilmCardTemplate = (filmCard) => {
   <p class="film-card__description">${description}</p>
   <a class="film-card__comments">${comments.length} comments</a>
   <form class="film-card__controls">
-    <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isInWatchList ? `` : `film-card__controls-item--active`}">Add to watchlist</button>
-    <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isInWatchedList ? `` : `film-card__controls-item--active`}"">Mark as watched</button>
-    <button class="film-card__controls-item button film-card__controls-item--favorite ${isInFavouriteList ? `` : `film-card__controls-item--active`}"">Mark as favorite</button>
+    <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isInWatchList ? ` film-card__controls-item--active` : ``}">Add to watchlist</button>
+    <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isInWatchedList ? ` film-card__controls-item--active` : ``}">Mark as watched</button>
+    <button class="film-card__controls-item button film-card__controls-item--favorite ${isInFavouriteList ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
   </form>
 </article>`);
 };
@@ -35,10 +35,6 @@ export default class FilmCard extends AbstractComponent {
 
   setOnPosterClickHandler(handler) {
     this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, handler);
-  }
-
-  removeOnPosterClickHandler(handler) {
-    this.getElement().querySelector(`.film-card__poster`).removeEventListener(`click`, handler);
   }
 
 
