@@ -29,6 +29,7 @@ export default class MovieController {
   render(movie) {
 
     const oldMovie = this._cardComponent;
+    const oldPopup = this._popupComponent;
 
     this._cardComponent = new FilmCardComponent(movie);
     this._popupComponent = new PopupComponent(movie);
@@ -54,32 +55,56 @@ export default class MovieController {
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    this._cardComponent.setWatchlistButtonClickHandler((evt) => {
-      evt.preventDefault();
+    const updateWatchList = () => {
       this._onDataChange(this, movie, Object.assign({}, movie, {
         isInWatchList: !movie.isInWatchList,
       }));
+    };
+
+    const updateWatchedList = () => {
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        isInWatchedList: !movie.isInWatchedList,
+      }));
+    };
+
+    const updateFavoriteList = () => {
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        isInFavoriteList: !movie.isInFavoriteList,
+      }));
+    };
+
+    this._cardComponent.setWatchlistButtonClickHandler((evt) => {
+      evt.preventDefault();
+      updateWatchList();
     });
 
     this._cardComponent.setWatchedButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        isInWatchedList: !movie.isInWatchedList,
-      }));
+      updateWatchedList();
     });
 
     this._cardComponent.setFavouriteButtonClickHandler((evt) => {
       evt.preventDefault();
+      updateFavoriteList();
+    });
 
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        isInFavouriteList: !movie.isInFavouriteList,
-      }));
+    this._popupComponent.setOnWatchListInputClickHandler(() => {
+      updateWatchList();
+    });
+
+    this._popupComponent.setOnWatchedInputClickHandler(() => {
+      updateWatchedList();
+    });
+
+    this._popupComponent.setOnFavoriteListInputClickHandler(() => {
+      updateFavoriteList();
     });
 
     this._cardComponent.setOnPosterClickHandler(onPosterClick);
 
-    if (oldMovie) {
+    if (oldMovie && oldPopup) {
       replace(this._cardComponent, oldMovie);
+      replace(this._popupComponent, oldPopup);
     } else {
       render(this._container, this._cardComponent, RenderPosition.BEFOREEND);
     }
@@ -87,6 +112,7 @@ export default class MovieController {
 
   _removePopup() {
     siteFooterElement.removeChild(this._popupComponent.getElement());
+
     this._popupComponent.clearComments();
     this._popupComponent.clearAvatarInComment();
     this._mode = Mode.DEFAULT;

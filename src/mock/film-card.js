@@ -62,7 +62,7 @@ const generateCard = () => {
 
     isInWatchList: false,
     isInWatchedList: false,
-    isInFavouriteList: false,
+    isInFavoriteList: false,
 
     original: originalTitle,
     director: directorName,
