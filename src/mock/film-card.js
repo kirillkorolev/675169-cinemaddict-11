@@ -46,19 +46,23 @@ const createFullDescription = (arr) => {
   return fullText;
 };
 
-const randomRaiting = () => (Math.random() * 10).toFixed(1);
+const randomRating = () => (Math.random() * 10).toFixed(1);
 const randomDuration = () => randomInteger(0, 3) + `h ` + randomInteger(0, 59) + `m`;
 
 const generateCard = () => {
   return {
     title: FILM_TITLES[randomElement(FILM_TITLES)],
-    raiting: randomRaiting(),
+    rating: randomRating(),
     year: randomInteger(1950, 2000),
     duration: randomDuration(),
     genre: genreList[randomElement(genreList)],
     description: createFullDescription(descriptionArr),
     poster: posters[randomElement(posters)],
     comments: generateCommentsArray(randomInteger(0, 5)),
+
+    isInWatchList: false,
+    isInWatchedList: false,
+    isInFavoriteList: false,
 
     original: originalTitle,
     director: directorName,

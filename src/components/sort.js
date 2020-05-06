@@ -3,14 +3,14 @@ import AbstractComponent from "./abstract-component.js";
 export const SortType = {
   DEFAULT: `default`,
   DATE_DOWN: `date-down`,
-  RAITING_DOWN: `raiting-down`,
+  RATING_DOWN: `raiting-down`,
 };
 
 const createSortMenuTemplate = () => {
   return (`<ul class="sort">
   <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button sort__button--active">Sort by default</a></li>
   <li><a href="#" data-sort-type="${SortType.DATE_DOWN}" class="sort__button">Sort by date</a></li>
-  <li><a href="#" data-sort-type="${SortType.RAITING_DOWN}" class="sort__button">Sort by rating</a></li>
+  <li><a href="#" data-sort-type="${SortType.RATING_DOWN}" class="sort__button">Sort by rating</a></li>
 </ul>`);
 };
 

@@ -1,7 +1,9 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
+// import {render, RenderPosition} from "../utils/render.js";
+import {createElement} from "../utils/render.js";
 
 const createFilmPopup = (card) => {
-  const {title, duration, poster, description, raiting, comments} = card;
+  const {title, duration, poster, description, rating, comments, isInWatchList, isInWatchedList, isInFavoriteList} = card;
 
   const originalTitle = `The Great Flamarion`;
   const directorName = `Anthony Mann`;
@@ -29,7 +31,7 @@ const createFilmPopup = (card) => {
               <p class="film-details__title-original">Original: ${originalTitle}</p>
             </div>
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${raiting}</p>
+              <p class="film-details__total-rating">${rating}</p>
             </div>
           </div>
           <table class="film-details__table">
@@ -71,11 +73,11 @@ const createFilmPopup = (card) => {
         </div>
       </div>
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isInWatchList ? `checked` : ``}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isInWatchedList ? `checked` : ``}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isInFavoriteList ? `checked` : ``}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
@@ -92,19 +94,19 @@ const createFilmPopup = (card) => {
           <div class="film-details__emoji-list">
             <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
             <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
+              <img src="./images/emoji/smile.png" id="smile" width="30" height="30" alt="emoji">
             </label>
             <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
             <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
+              <img src="./images/emoji/sleeping.png" id="sleeping" width="30" height="30" alt="emoji">
             </label>
             <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
             <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
+              <img src="./images/emoji/puke.png" id="puke" width="30" height="30" alt="emoji">
             </label>
             <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
             <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
+              <img src="./images/emoji/angry.png" id="angry" width="30" height="30" alt="emoji">
             </label>
           </div>
         </div>
@@ -114,18 +116,95 @@ const createFilmPopup = (card) => {
 </section>`);
 };
 
-export default class Popup extends AbstractComponent {
+export default class Popup extends AbstractSmartComponent {
   constructor(card) {
     super();
 
     this._card = card;
+    this._setOnEmojiClickHandler();
+
+    this._closeButtonClickHandler = null;
+    this._addWatchInputClickHandler = null;
+    this._addWatchedInputClickHandler = null;
+    this._addFavoriteInputClickHandler = null;
   }
 
   getTemplate() {
     return createFilmPopup(this._card);
   }
 
+  clearComments() {
+    this.getElement().querySelector(`.film-details__comments-list`).innerHTML = ``;
+  }
+
+  recoveryListeners() {
+    this.setOnCloseButtonClickHandler(this._closeButtonClickHandler);
+    this._setOnEmojiClickHandler();
+
+    this.setOnWatchListInputClickHandler(this._addWatchInputClickHandler);
+    this.setOnWatchedInputClickHandler(this._addWatchedInputClickHandler);
+    this.setOnFavoriteListInputClickHandler(this._addFavoriteInputClickHandler);
+  }
+
   setOnCloseButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
+
+    this._closeButtonClickHandler = handler;
+  }
+
+  _createImg(name) {
+    const temlate = `<img src="./images/emoji/${name}.png" width="55" height="55" alt="emoji-${name}">`;
+
+    return createElement(temlate);
+  }
+
+  _renderEmoji(place, image) {
+    const avatar = this._createImg(image.id);
+    if (place.children.length === 0) {
+      place.appendChild(avatar);
+    }
+
+    if (place.children.length === 1) {
+      place.replaceChild(avatar, place.querySelector(`img`));
+    }
+  }
+
+  _setOnEmojiClickHandler() {
+    const emojilist = this.getElement().querySelector(`.film-details__emoji-list`);
+    const newComment = this.getElement().querySelector(`.film-details__new-comment`);
+
+    const newCommentAvatar = newComment.querySelector(`.film-details__add-emoji-label`);
+    emojilist.addEventListener(`click`, (evt) => {
+      const image = evt.target.closest(`img`);
+
+      if (image) {
+        this._renderEmoji(newCommentAvatar, image);
+      }
+    });
+  }
+
+  clearAvatarInComment() {
+    const addingComment = this.getElement().querySelector(`.film-details__add-emoji-label`);
+    const avatar = addingComment.querySelector(`img`);
+
+    if (addingComment.contains(avatar)) {
+      addingComment.removeChild(avatar);
+    }
+  }
+
+  setOnWatchListInputClickHandler(handler) {
+    this.getElement().querySelector(`#watchlist`).addEventListener(`change`, handler);
+    this._addWatchInputClickHandler = handler;
+  }
+
+  setOnWatchedInputClickHandler(handler) {
+    this.getElement().querySelector(`#watched`).addEventListener(`change`, handler);
+    this._addWatchedInputClickHandler = handler;
+  }
+
+  setOnFavoriteListInputClickHandler(handler) {
+    this.getElement().querySelector(`#favorite`).addEventListener(`change`, handler);
+    this._addFavoriteInputClickHandler = handler;
   }
 }
+
