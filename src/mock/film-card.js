@@ -47,7 +47,7 @@ const createFullDescription = (arr) => {
 };
 
 const randomRating = () => (Math.random() * 10).toFixed(1);
-const randomDuration = () => randomInteger(0, 3) + `h ` + randomInteger(0, 59) + `m`;
+const randomDuration = () => randomInteger(30, 180);
 
 const generateCard = () => {
   return {
