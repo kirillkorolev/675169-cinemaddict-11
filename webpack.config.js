@@ -1,5 +1,4 @@
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-// const MomentDurationFormatSetup = require('moment-duration-format');
 const path = require('path');
 
 module.exports = {
@@ -18,6 +17,5 @@ module.exports = {
     new MomentLocalesPlugin({
       localesToKeep: ['es-us'],
     })
-    // MomentDurationFormatSetup(moment)
   ]
 };

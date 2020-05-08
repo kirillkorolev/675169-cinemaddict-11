@@ -1,4 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
+// import {formatCommentDate} from "../utils/common.js";
 
 const createCommentMarkup = (comment) => {
   const {avatar, name, text, date, time} = comment;
