@@ -2,7 +2,7 @@ import PopupComponent from "../components/popup.js";
 import FilmCardComponent from "../components/film-card.js";
 import CommentComponent from "../components/comment.js";
 
-import {RenderPosition, render, replace} from "../utils/render.js";
+import {RenderPosition, render, replace, remove} from "../utils/render.js";
 
 const siteFooterElement = document.querySelector(`.footer`);
 
@@ -137,5 +137,11 @@ export default class MovieController {
     if (this._mode !== Mode.DEFAULT) {
       this._closePopup();
     }
+  }
+
+  destroy() {
+    remove(this._cardComponent);
+
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 }

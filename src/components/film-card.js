@@ -4,15 +4,12 @@ import {formatRuntime, formatYear} from "../utils/common.js";
 const createFilmCardTemplate = (filmCard) => {
   const {title, rating, year, duration, genre, description, poster, comments, isInWatchList, isInWatchedList, isInFavoriteList} = filmCard;
 
-  const runtime = formatRuntime(duration);
-  const releaseYear = formatYear(year);
-
   return (`<article class="film-card">
   <h3 class="film-card__title">${title}</h3>
   <p class="film-card__rating">${rating}</p>
   <p class="film-card__info">
-    <span class="film-card__year">${releaseYear}</span>
-    <span class="film-card__duration">${runtime}</span>
+    <span class="film-card__year">${formatYear(year)}</span>
+    <span class="film-card__duration">${formatRuntime(duration)}</span>
     <span class="film-card__genre">${genre}</span>
   </p>
   <img src="./images/posters/${poster}" alt="${title}" class="film-card__poster">
