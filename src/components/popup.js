@@ -2,6 +2,9 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 // import {render, RenderPosition} from "../utils/render.js";
 import {createElement} from "../utils/render.js";
 
+import CommentComponent from "../components/comment.js";
+import {RenderPosition, render} from "../utils/render.js";
+
 const createFilmPopup = (card) => {
   const {title, duration, poster, description, rating, comments, isInWatchList, isInWatchedList, isInFavoriteList} = card;
 
@@ -122,6 +125,7 @@ export default class Popup extends AbstractSmartComponent {
 
     this._card = card;
     this._setOnEmojiClickHandler();
+    this._renderComments();
 
     this._closeButtonClickHandler = null;
     this._addWatchInputClickHandler = null;
@@ -205,6 +209,15 @@ export default class Popup extends AbstractSmartComponent {
   setOnFavoriteListInputClickHandler(handler) {
     this.getElement().querySelector(`#favorite`).addEventListener(`change`, handler);
     this._addFavoriteInputClickHandler = handler;
+  }
+
+  _renderComments() {
+    const commentsList = this.getElement().querySelector(`.film-details__comments-list`);
+    const comments = this._card.comments;
+
+    comments.forEach((comment) => {
+      render(commentsList, new CommentComponent(comment), RenderPosition.BEFOREEND);
+    });
   }
 }
 

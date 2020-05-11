@@ -38,6 +38,18 @@ export default class Filter extends AbstractComponent {
     this.getElement().addEventListener(`click`, (evt) => {
       const filterName = getFilterNameById(evt.target.id);
       handler(filterName);
+
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
+
+      this.getElement().querySelector(`.main-navigation__item--active`).classList.remove(`main-navigation__item--active`);
+      evt.target.classList.add(`main-navigation__item--active`);
+
+      if (evt.target.classList.contains(`.main-navigation__item--active`)) {
+        return;
+      }
+
     });
   }
 }

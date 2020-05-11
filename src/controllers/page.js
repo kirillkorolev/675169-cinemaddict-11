@@ -101,13 +101,11 @@ export default class PageController {
   }
 
   render() {
-    // this._films = films;
     const movies = this._moviesModel.getMovies();
-
     const siteMainElement = document.querySelector(`.main`);
+    render(siteMainElement, this._sortComponent, RenderPosition.BEFOREEND);
 
     if (movies.length > 0) {
-      render(siteMainElement, this._sortComponent, RenderPosition.BEFOREEND);
       let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
       this._renderMovies(movies.slice(0, showingFilmsCount));
       this._renderLoadMoreButton(movies);
@@ -152,10 +150,37 @@ export default class PageController {
     });
   }
 
-  _updateMovies(count) {
+  _updateMovies() {
+    remove(this._loadMoreButtonComponent);
     this._removeMovies();
-    this._renderMovies(this._moviesModel.getMovies().slice(0, count));
-    this._renderLoadMoreButton();
+
+    const updatedMovies = this._moviesModel.getMovies();
+    const container = this._container.getElement();
+
+    if (updatedMovies.length > 0) {
+      this._showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
+      this._renderMovies(updatedMovies.slice(0, this._showingFilmsCount));
+
+      if (this._showingFilmsCount >= updatedMovies.length) {
+        return;
+      }
+
+      render(container.querySelector(`.films-list`), this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
+
+      this._loadMoreButtonComponent.setClickHandler(() => {
+        const prevFilmsCount = this._showingFilmsCount;
+        this._showingFilmsCount = prevFilmsCount + SHOWING_FILMS_COUNT_BY_BUTTON;
+        const filmsListElement = container.querySelector(`.films-list__container`);
+
+        const newMovies = renderMovies(filmsListElement, updatedMovies.slice(prevFilmsCount, this._showingFilmsCount), this._onDataChange, this._onViewChange);
+
+        this._showedMovieControllers = this._showedMovieControllers.concat(newMovies);
+
+        if (this._showingFilmsCount >= updatedMovies.length) {
+          remove(this._loadMoreButtonComponent);
+        }
+      });
+    }
   }
 
   _onDataChange(movieController, oldData, newData) {
@@ -166,7 +191,7 @@ export default class PageController {
   }
 
   _onFilterChange() {
-    this._updateMovies(SHOWING_FILMS_COUNT_ON_START);
+    this._updateMovies();
   }
 
   _onViewChange() {

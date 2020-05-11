@@ -18,7 +18,7 @@ import RatedFilmsComponent from "./components/rated-films.js";
 import CommentedFilmsComponent from "./components/commented-films.js";
 
 
-import {RenderPosition, render} from "./utils/render.js";
+import {RenderPosition, render, replace} from "./utils/render.js";
 
 const FILM_COUNT = 11;
 // const EXTRAS_COUNT = 2;
@@ -49,17 +49,18 @@ const FilmsStatisticElement = new FilmsStatistic(FILM_COUNT);
 const siteStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 render(siteStatisticElement, FilmsStatisticElement, RenderPosition.BEFOREEND);
 pageController.render(cardsMocks);
+render(siteMainElement, filmsSectionComponent, RenderPosition.BEFOREEND);
 
 if (cardsMocks.length > 0) {
-  render(siteMainElement, filmsSectionComponent, RenderPosition.BEFOREEND);
+
 
   const ratedFilmsComponent = new RatedFilmsComponent();
   const commentedFilmsComponent = new CommentedFilmsComponent();
 
-  // const extrasMocks = cardsMocks.slice(0, EXTRAS_COUNT);
 
+  // const extrasMocks = cardsMocks.slice(0, EXTRAS_COUNT);
   // const renderExtrasFilms = (filmsListElement, cards) => {
-  //   cards.forEach((card) => renderPopupsAndCards(filmsListElement, card));
+  //   cards.forEach((card) => render(filmsListElement, card, RenderPosition.BEFOREEND));
   // };
 
   render(filmsSectionComponent.getElement(), ratedFilmsComponent, RenderPosition.BEFOREEND);
@@ -67,8 +68,10 @@ if (cardsMocks.length > 0) {
 
   // renderExtrasFilms(ratedFilmsComponent.getElement().querySelector(`.films-list__container`), extrasMocks);
   // renderExtrasFilms(commentedFilmsComponent.getElement().querySelector(`.films-list__container`), extrasMocks);
+
+
 } else {
   const noFilmsComponent = new NoFilmsComponent();
-  render(siteMainElement, noFilmsComponent, RenderPosition.BEFOREEND);
+  replace(noFilmsComponent, filmsSectionComponent);
 }
 
