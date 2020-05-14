@@ -12,6 +12,7 @@ import FilmsComponent from "./components/films.js";
 import NoFilmsComponent from "./components/no-films.js";
 import FilmsStatistic from "./components/films-statistic.js";
 import MoviesModel from "./models/movies.js";
+
 // import {renderPopupsAndCards} from "./controllers/page.js";
 
 import RatedFilmsComponent from "./components/rated-films.js";

@@ -4,13 +4,15 @@ import FilmCardComponent from "../components/film-card.js";
 
 import {RenderPosition, render, replace, remove} from "../utils/render.js";
 
+import CommentsModel from "../models/comments.js";
+const commentsModel = new CommentsModel();
+
 const siteFooterElement = document.querySelector(`.footer`);
 
 const Mode = {
   DEFAULT: `default`,
   OPENEDPOPUP: `opened`,
 };
-
 
 export default class MovieController {
   constructor(container, onDataChange, onViewChange) {
@@ -31,6 +33,8 @@ export default class MovieController {
     const oldPopup = this._popupComponent;
 
     this._cardComponent = new FilmCardComponent(movie);
+    commentsModel.setComments(movie.comments);
+
     this._popupComponent = new PopupComponent(movie);
 
     const onPosterClick = () => {
