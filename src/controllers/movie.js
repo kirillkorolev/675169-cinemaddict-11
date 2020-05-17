@@ -92,14 +92,14 @@ export default class MovieController {
     this._cardComponent.setOnPosterClickHandler(onPosterClick);
 
     this._popupComponent.setOnCommentDeleteClickHandler((index) => {
-      const newComments = comments.slice();
-      newComments.splice(index, 1);
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        comments: newComments
-      }), index);
+      // const newComments = comments.slice();
+      // newComments.splice(index, 1);
+      // this._onDataChange(this, movie, Object.assign({}, movie, {
+      //   comments: newComments
+      // }), index);
 
-      // const deletedComment = comments[index];
-      // this._onCommentsChange(this._movie, deletedComment, null);
+      const deletedComment = comments[index];
+      this._onCommentsChange(movie, deletedComment, null);
     });
 
     this._popupComponent.setOnNewCommentAddHandler(this._newCommentAddHandler);
@@ -128,7 +128,6 @@ export default class MovieController {
 
   _newCommentAddHandler() {
     const data = this._popupComponent.getData();
-    console.log(data);
 
     if (data.text && data.avatar) {
       this._onCommentsChange(this._movie, null, data);

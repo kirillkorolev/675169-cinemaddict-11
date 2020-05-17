@@ -137,8 +137,8 @@ export default class Popup extends AbstractSmartComponent {
     this._addFavoriteInputClickHandler = null;
 
 
-    this._setOnCommentDeleteCkickHandler = null;
-    this._setOnNewCommentAddHandler = null;
+    this._commentDeleteClickHandler = null;
+    this._onNewCommentAddHandler = null;
   }
 
   getTemplate() {
@@ -158,7 +158,7 @@ export default class Popup extends AbstractSmartComponent {
     this.setOnFavoriteListInputClickHandler(this._addFavoriteInputClickHandler);
 
 
-    this.setOnCommentDeleteCkickHandler(this._setOnCommentDeleteCkickHandler);
+    this.setOnCommentDeleteClickHandler(this._commentDeleteClickHandler);
     this.setOnNewCommentAddHandler(this._onNewCommentAddHandler);
   }
 
@@ -233,17 +233,28 @@ export default class Popup extends AbstractSmartComponent {
   }
 
   setOnCommentDeleteClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, (evt) => {
-      if (evt.target.classList.contains(`.film-details__comment-delete`)) {
+    // this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, (evt) => {
+    //   if (evt.target.classList.contains(`.film-details__comment-delete`)) {
+    //     evt.preventDefault();
+
+    //     const index = evt.target.closest(`.film-details__comment`).id;
+
+    //     handler(index);
+    //   }
+    // });
+
+    const buttons = this.getElement().querySelectorAll(`.film-details__comment-delete`);
+    buttons.forEach((button) => {
+      button.addEventListener(`click`, (evt) => {
         evt.preventDefault();
 
         const index = evt.target.closest(`.film-details__comment`).id;
 
         handler(index);
-      }
+      });
     });
 
-    this._setOnCommentDeleteCkickHandler = handler;
+    this._commentDeleteClickHandler = handler;
   }
 
   _parseFormData(formData) {
