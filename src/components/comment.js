@@ -2,9 +2,9 @@ import AbstractComponent from "./abstract-component.js";
 // import {formatCommentDate} from "../utils/common.js";
 
 const createCommentMarkup = (comment) => {
-  const {avatar, name, text, date, time} = comment;
+  const {id, avatar, name, text, date, time} = comment;
 
-  return (`<li class="film-details__comment">
+  return (`<li class="film-details__comment" id="${id}">
   <span class="film-details__comment-emoji">
     <img src="./images/emoji/${avatar}.png" width="55" height="55" alt="emoji-${avatar}">
   </span>

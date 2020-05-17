@@ -4,3 +4,7 @@ export const FilterType = {
   HISTORY: `History`,
   FAVORITES: `Favorites`,
 };
+
+export const KeyCode = {
+  ENTER: `Enter`
+};

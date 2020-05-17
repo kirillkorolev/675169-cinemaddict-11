@@ -2,10 +2,11 @@ import PopupComponent from "../components/popup.js";
 import FilmCardComponent from "../components/film-card.js";
 // import CommentComponent from "../components/comment.js";
 
+
 import {RenderPosition, render, replace, remove} from "../utils/render.js";
 
 import CommentsModel from "../models/comments.js";
-const commentsModel = new CommentsModel();
+
 
 const siteFooterElement = document.querySelector(`.footer`);
 
@@ -25,7 +26,13 @@ export default class MovieController {
     this._popupComponent = null;
     this._cardComponent = null;
 
+    this._commentsModel = new CommentsModel();
+
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+
+    this._onCommentsChange = this._onCommentsChange.bind(this);
+
+    this._newCommentAddHandler = this._newCommentAddHandler.bind(this);
   }
 
   render(movie) {
@@ -33,9 +40,12 @@ export default class MovieController {
     const oldPopup = this._popupComponent;
 
     this._cardComponent = new FilmCardComponent(movie);
-    commentsModel.setComments(movie.comments);
-
     this._popupComponent = new PopupComponent(movie);
+
+    this._commentsModel.setComments(movie.comments);
+
+    const comments = this._commentsModel.getComments();
+
 
     const onPosterClick = () => {
       this._onViewChange();
@@ -81,6 +91,19 @@ export default class MovieController {
 
     this._cardComponent.setOnPosterClickHandler(onPosterClick);
 
+    this._popupComponent.setOnCommentDeleteClickHandler((index) => {
+      const newComments = comments.slice();
+      newComments.splice(index, 1);
+      this._onDataChange(this, movie, Object.assign({}, movie, {
+        comments: newComments
+      }), index);
+
+      // const deletedComment = comments[index];
+      // this._onCommentsChange(this._movie, deletedComment, null);
+    });
+
+    this._popupComponent.setOnNewCommentAddHandler(this._newCommentAddHandler);
+
     if (oldMovie && oldPopup) {
       replace(this._cardComponent, oldMovie);
       replace(this._popupComponent, oldPopup);
@@ -88,6 +111,29 @@ export default class MovieController {
       render(this._container, this._cardComponent, RenderPosition.BEFOREEND);
     }
   }
+
+  _newCommentAddHandler() {
+    const data = this._popupComponent.getData();
+
+    if (data.text && data.avatar) {
+      this._onCommentsChange(this._movie, null, data);
+    }
+  }
+
+  _onCommentsChange(movie, oldComment, newComment) {
+    if (newComment === null) {
+      this._commentsModel.removeComment(oldComment.id);
+    } else if (oldComment === null) {
+      this._commentsModel.createComment(newComment);
+    }
+
+    const newMovie = Object.assign({}, movie, {
+      comments: this._commentsModel.getComments(),
+    });
+
+    this._onDataChange(this, movie, newMovie);
+  }
+
 
   _removePopup() {
     siteFooterElement.removeChild(this._popupComponent.getElement());

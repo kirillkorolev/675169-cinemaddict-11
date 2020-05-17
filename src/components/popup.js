@@ -2,6 +2,10 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 // import {render, RenderPosition} from "../utils/render.js";
 import {createElement} from "../utils/render.js";
 
+import {nanoid} from "nanoid";
+// import moment from "moment";
+// import KeyCode from "../const.js";
+
 import CommentComponent from "../components/comment.js";
 import {RenderPosition, render} from "../utils/render.js";
 
@@ -131,6 +135,10 @@ export default class Popup extends AbstractSmartComponent {
     this._addWatchInputClickHandler = null;
     this._addWatchedInputClickHandler = null;
     this._addFavoriteInputClickHandler = null;
+
+
+    this._setOnCommentDeleteCkickHandler = null;
+    this._setOnNewCommentAddHandler = null;
   }
 
   getTemplate() {
@@ -138,7 +146,7 @@ export default class Popup extends AbstractSmartComponent {
   }
 
   clearComments() {
-    this.getElement().querySelector(`.film-details__comments-list`).innerHTML = ``;
+    // this.getElement().querySelector(`.film-details__comments-list`).innerHTML = ``;
   }
 
   recoveryListeners() {
@@ -148,6 +156,10 @@ export default class Popup extends AbstractSmartComponent {
     this.setOnWatchListInputClickHandler(this._addWatchInputClickHandler);
     this.setOnWatchedInputClickHandler(this._addWatchedInputClickHandler);
     this.setOnFavoriteListInputClickHandler(this._addFavoriteInputClickHandler);
+
+
+    this.setOnCommentDeleteCkickHandler(this._setOnCommentDeleteCkickHandler);
+    this.setOnNewCommentAddHandler(this._setOnNewCommentAddHandler);
   }
 
   setOnCloseButtonClickHandler(handler) {
@@ -218,6 +230,52 @@ export default class Popup extends AbstractSmartComponent {
     comments.forEach((comment) => {
       render(commentsList, new CommentComponent(comment), RenderPosition.BEFOREEND);
     });
+  }
+
+  setOnCommentDeleteClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, (evt) => {
+      if (evt.target.classList.contains(`.film-details__comment-delete`)) {
+        evt.preventDefault();
+
+        const index = evt.target.closest(`.film-details__comment`).id;
+
+        handler(index);
+      }
+    });
+
+    this._setOnCommentDeleteCkickHandler = handler;
+  }
+
+  _parseFormData(formData) {
+    return {
+      id: nanoid(),
+      avatar: this.getElement().querySelector(`.film-details__new-comment`).value,
+      name: `name`,
+      date: `date`,
+      time: `11:11`,
+      text: formData.get(`comment`),
+    };
+  }
+
+  getData() {
+    const form = this.getElement().querySelector(`.film-details__inner`);
+    const formData = new FormData(form);
+
+    return this._parseFormData(formData);
+  }
+
+  setOnNewCommentAddHandler(handler) {
+    this.getElement().addEventListener(`keydown`, (evt) => {
+
+      if (((evt.ctrlKey || evt.metaKey) && evt.key) === `Enter`) {
+
+        evt.preventDefault();
+
+        handler();
+      }
+    });
+
+    this._setOnNewCommentAddHandler = handler;
   }
 }
 
