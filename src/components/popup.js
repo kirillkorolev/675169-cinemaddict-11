@@ -159,7 +159,7 @@ export default class Popup extends AbstractSmartComponent {
 
 
     this.setOnCommentDeleteCkickHandler(this._setOnCommentDeleteCkickHandler);
-    this.setOnNewCommentAddHandler(this._setOnNewCommentAddHandler);
+    this.setOnNewCommentAddHandler(this._onNewCommentAddHandler);
   }
 
   setOnCloseButtonClickHandler(handler) {
@@ -249,7 +249,7 @@ export default class Popup extends AbstractSmartComponent {
   _parseFormData(formData) {
     return {
       id: nanoid(),
-      avatar: this.getElement().querySelector(`.film-details__new-comment`).value,
+      avatar: this.getElement().querySelector(`.film-details__new-comment img`).alt,
       name: `name`,
       date: `date`,
       time: `11:11`,
@@ -268,14 +268,13 @@ export default class Popup extends AbstractSmartComponent {
     this.getElement().addEventListener(`keydown`, (evt) => {
 
       if (((evt.ctrlKey || evt.metaKey) && evt.key) === `Enter`) {
-
         evt.preventDefault();
 
         handler();
       }
     });
 
-    this._setOnNewCommentAddHandler = handler;
+    this._onNewCommentAddHandler = handler;
   }
 }
 

@@ -112,14 +112,6 @@ export default class MovieController {
     }
   }
 
-  _newCommentAddHandler() {
-    const data = this._popupComponent.getData();
-
-    if (data.text && data.avatar) {
-      this._onCommentsChange(this._movie, null, data);
-    }
-  }
-
   _onCommentsChange(movie, oldComment, newComment) {
     if (newComment === null) {
       this._commentsModel.removeComment(oldComment.id);
@@ -134,6 +126,14 @@ export default class MovieController {
     this._onDataChange(this, movie, newMovie);
   }
 
+  _newCommentAddHandler() {
+    const data = this._popupComponent.getData();
+    console.log(data);
+
+    if (data.text && data.avatar) {
+      this._onCommentsChange(this._movie, null, data);
+    }
+  }
 
   _removePopup() {
     siteFooterElement.removeChild(this._popupComponent.getElement());
