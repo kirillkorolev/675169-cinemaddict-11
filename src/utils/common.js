@@ -11,10 +11,7 @@ export const formatRuntime = (runtime) => {
   }
 };
 
-export const formatYear = (date) => {
-  const year = moment(date).year();
-  return year;
-};
+export const formatYear = (date) => moment(date).year();
 
 export const formatCommentDate = (data) => {
   const utc = moment.utc(data).toDate();

@@ -1,6 +1,14 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-// import {render, RenderPosition} from "../utils/render.js";
 import {createElement} from "../utils/render.js";
+
+import {randomElement} from "../utils.js";
+import {nameList} from "../mock/comment.js";
+
+import moment from "moment";
+import {nanoid} from "nanoid";
+
+import CommentComponent from "../components/comment.js";
+import {RenderPosition, render} from "../utils/render.js";
 
 const createFilmPopup = (card) => {
   const {title, duration, poster, description, rating, comments, isInWatchList, isInWatchedList, isInFavoriteList} = card;
@@ -122,11 +130,15 @@ export default class Popup extends AbstractSmartComponent {
 
     this._card = card;
     this._setOnEmojiClickHandler();
+    this._renderComments();
 
     this._closeButtonClickHandler = null;
     this._addWatchInputClickHandler = null;
     this._addWatchedInputClickHandler = null;
     this._addFavoriteInputClickHandler = null;
+
+    this._commentDeleteClickHandler = null;
+    this._onNewCommentAddHandler = null;
   }
 
   getTemplate() {
@@ -134,7 +146,7 @@ export default class Popup extends AbstractSmartComponent {
   }
 
   clearComments() {
-    this.getElement().querySelector(`.film-details__comments-list`).innerHTML = ``;
+    // this.getElement().querySelector(`.film-details__comments-list`).innerHTML = ``;
   }
 
   recoveryListeners() {
@@ -144,6 +156,9 @@ export default class Popup extends AbstractSmartComponent {
     this.setOnWatchListInputClickHandler(this._addWatchInputClickHandler);
     this.setOnWatchedInputClickHandler(this._addWatchedInputClickHandler);
     this.setOnFavoriteListInputClickHandler(this._addFavoriteInputClickHandler);
+
+    this.setOnCommentDeleteClickHandler(this._commentDeleteClickHandler);
+    this.setOnNewCommentAddHandler(this._onNewCommentAddHandler);
   }
 
   setOnCloseButtonClickHandler(handler) {
@@ -153,7 +168,7 @@ export default class Popup extends AbstractSmartComponent {
   }
 
   _createImg(name) {
-    const temlate = `<img src="./images/emoji/${name}.png" width="55" height="55" alt="emoji-${name}">`;
+    const temlate = `<img src="./images/emoji/${name}.png" width="55" height="55" alt="emoji-${name}" name="${name}">`;
 
     return createElement(temlate);
   }
@@ -205,6 +220,61 @@ export default class Popup extends AbstractSmartComponent {
   setOnFavoriteListInputClickHandler(handler) {
     this.getElement().querySelector(`#favorite`).addEventListener(`change`, handler);
     this._addFavoriteInputClickHandler = handler;
+  }
+
+  _renderComments() {
+    const commentsList = this.getElement().querySelector(`.film-details__comments-list`);
+    const comments = this._card.comments;
+
+    comments.forEach((comment) => {
+      render(commentsList, new CommentComponent(comment), RenderPosition.BEFOREEND);
+    });
+  }
+
+  setOnCommentDeleteClickHandler(handler) {
+    const buttons = this.getElement().querySelectorAll(`.film-details__comment-delete`);
+    buttons.forEach((button) => {
+      button.addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+
+        const index = evt.target.closest(`.film-details__comment`).id;
+
+        handler(index);
+      });
+    });
+
+    this._commentDeleteClickHandler = handler;
+  }
+
+  _parseFormData(formData) {
+    return {
+      id: nanoid(),
+      avatar: this.getElement().querySelector(`.film-details__new-comment img`).name,
+      name: nameList[randomElement(nameList)],
+      time: moment().format(`HH:mm`),
+      date: moment().format(`YYYY/MM/DD`),
+      text: formData.get(`comment`),
+    };
+  }
+
+  getData() {
+    const form = this.getElement().querySelector(`.film-details__inner`);
+    const formData = new FormData(form);
+
+    return this._parseFormData(formData);
+  }
+
+  setOnNewCommentAddHandler(handler) {
+    this.getElement().addEventListener(`keydown`, (evt) => {
+
+      if (((evt.ctrlKey || evt.metaKey) && evt.key) === `Enter`) {
+        evt.preventDefault();
+
+        handler();
+      }
+    });
+
+    this._onNewCommentAddHandler = handler;
   }
 }
 

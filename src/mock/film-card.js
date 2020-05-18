@@ -51,6 +51,7 @@ const randomDuration = () => randomInteger(30, 180);
 
 const generateCard = () => {
   return {
+    id: String(new Date() + Math.random()),
     title: FILM_TITLES[randomElement(FILM_TITLES)],
     rating: randomRating(),
     year: randomInteger(1950, 2000),

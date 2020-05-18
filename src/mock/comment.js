@@ -1,11 +1,13 @@
 import {randomElement, randomInteger} from "../utils.js";
+import {nanoid} from 'nanoid';
 
 const avatarsList = [`smile`, `sleeping`, `puke`, `angry`];
-const nameList = [`Tim Macoveev`, `John Doe`, `Henry Rollins`, `Yan McKay`, `Glen Danzig`];
+export const nameList = [`Tim Macoveev`, `John Doe`, `Henry Rollins`, `Yan McKay`, `Glen Danzig`];
 const textsList = [`Interesting setting and a good cast`, `we understand you’ve probably got some questions`, `what these changes mean for`, `announced that shops selling non-essential items`];
 
 const generateComment = () => {
   return {
+    id: nanoid(),
     avatar: avatarsList[randomElement(avatarsList)],
     name: nameList[randomElement(nameList)],
     text: textsList[randomElement(textsList)],
