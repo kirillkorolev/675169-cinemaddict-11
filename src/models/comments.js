@@ -15,7 +15,7 @@ export default class Comments {
   }
 
   createComment(comment) {
-    this._tasks = [].concat(comment, this._comments);
+    this._comments = [].concat(comment, this._comments);
     this._callHandlers(this._dataChangeHandlers);
   }
 

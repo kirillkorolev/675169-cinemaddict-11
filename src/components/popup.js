@@ -1,10 +1,11 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
-// import {render, RenderPosition} from "../utils/render.js";
 import {createElement} from "../utils/render.js";
 
+import {randomElement} from "../utils.js";
+import {nameList} from "../mock/comment.js";
+
+import moment from "moment";
 import {nanoid} from "nanoid";
-// import moment from "moment";
-// import KeyCode from "../const.js";
 
 import CommentComponent from "../components/comment.js";
 import {RenderPosition, render} from "../utils/render.js";
@@ -136,7 +137,6 @@ export default class Popup extends AbstractSmartComponent {
     this._addWatchedInputClickHandler = null;
     this._addFavoriteInputClickHandler = null;
 
-
     this._commentDeleteClickHandler = null;
     this._onNewCommentAddHandler = null;
   }
@@ -157,7 +157,6 @@ export default class Popup extends AbstractSmartComponent {
     this.setOnWatchedInputClickHandler(this._addWatchedInputClickHandler);
     this.setOnFavoriteListInputClickHandler(this._addFavoriteInputClickHandler);
 
-
     this.setOnCommentDeleteClickHandler(this._commentDeleteClickHandler);
     this.setOnNewCommentAddHandler(this._onNewCommentAddHandler);
   }
@@ -169,7 +168,7 @@ export default class Popup extends AbstractSmartComponent {
   }
 
   _createImg(name) {
-    const temlate = `<img src="./images/emoji/${name}.png" width="55" height="55" alt="emoji-${name}">`;
+    const temlate = `<img src="./images/emoji/${name}.png" width="55" height="55" alt="emoji-${name}" name="${name}">`;
 
     return createElement(temlate);
   }
@@ -233,16 +232,6 @@ export default class Popup extends AbstractSmartComponent {
   }
 
   setOnCommentDeleteClickHandler(handler) {
-    // this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, (evt) => {
-    //   if (evt.target.classList.contains(`.film-details__comment-delete`)) {
-    //     evt.preventDefault();
-
-    //     const index = evt.target.closest(`.film-details__comment`).id;
-
-    //     handler(index);
-    //   }
-    // });
-
     const buttons = this.getElement().querySelectorAll(`.film-details__comment-delete`);
     buttons.forEach((button) => {
       button.addEventListener(`click`, (evt) => {
@@ -260,10 +249,10 @@ export default class Popup extends AbstractSmartComponent {
   _parseFormData(formData) {
     return {
       id: nanoid(),
-      avatar: this.getElement().querySelector(`.film-details__new-comment img`).alt,
-      name: `name`,
-      date: `date`,
-      time: `11:11`,
+      avatar: this.getElement().querySelector(`.film-details__new-comment img`).name,
+      name: nameList[randomElement(nameList)],
+      time: moment().format(`HH:mm`),
+      date: moment().format(`YYYY/MM/DD`),
       text: formData.get(`comment`),
     };
   }

@@ -31,8 +31,6 @@ export default class MovieController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
 
     this._onCommentsChange = this._onCommentsChange.bind(this);
-
-    this._newCommentAddHandler = this._newCommentAddHandler.bind(this);
   }
 
   render(movie) {
@@ -92,17 +90,17 @@ export default class MovieController {
     this._cardComponent.setOnPosterClickHandler(onPosterClick);
 
     this._popupComponent.setOnCommentDeleteClickHandler((index) => {
-      // const newComments = comments.slice();
-      // newComments.splice(index, 1);
-      // this._onDataChange(this, movie, Object.assign({}, movie, {
-      //   comments: newComments
-      // }), index);
-
-      const deletedComment = comments[index];
+      const deletedComment = comments.find((comment) => comment.id === index);
       this._onCommentsChange(movie, deletedComment, null);
     });
 
-    this._popupComponent.setOnNewCommentAddHandler(this._newCommentAddHandler);
+    this._popupComponent.setOnNewCommentAddHandler(() => {
+      const data = this._popupComponent.getData();
+
+      if (data.text && data.avatar) {
+        this._onCommentsChange(movie, null, data);
+      }
+    });
 
     if (oldMovie && oldPopup) {
       replace(this._cardComponent, oldMovie);
@@ -124,14 +122,6 @@ export default class MovieController {
     });
 
     this._onDataChange(this, movie, newMovie);
-  }
-
-  _newCommentAddHandler() {
-    const data = this._popupComponent.getData();
-
-    if (data.text && data.avatar) {
-      this._onCommentsChange(this._movie, null, data);
-    }
   }
 
   _removePopup() {
