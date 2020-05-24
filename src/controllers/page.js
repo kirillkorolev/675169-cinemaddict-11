@@ -82,6 +82,7 @@ const getSortedFilms = (films, sortType) => {
 
 export default class PageController {
   constructor(container, moviesModel) {
+
     this._container = container;
     this._moviesModel = moviesModel;
 
@@ -99,6 +100,14 @@ export default class PageController {
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._moviesModel.setFilterChangeHandler(this._onFilterChange);
   }
+
+  // hide() {
+  //   this._container.hide();
+  // }
+
+  // show() {
+  //   this._container.show();
+  // }
 
   render() {
     const movies = this._moviesModel.getMovies();

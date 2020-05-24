@@ -7,7 +7,6 @@ import {RenderPosition, render, replace, remove} from "../utils/render.js";
 
 import CommentsModel from "../models/comments.js";
 
-
 const siteFooterElement = document.querySelector(`.footer`);
 
 const Mode = {
@@ -40,10 +39,18 @@ export default class MovieController {
     this._cardComponent = new FilmCardComponent(movie);
     this._popupComponent = new PopupComponent(movie);
 
+
+    // api.getComments()
+    //   .then((movie.id) => {
+    //     this._commentsModel.setMovies(movies);
+    //     pageController.render();
+    //   });
+
+
     this._commentsModel.setComments(movie.comments);
 
     const comments = this._commentsModel.getComments();
-
+    console.log(comments);
 
     const onPosterClick = () => {
       this._onViewChange();

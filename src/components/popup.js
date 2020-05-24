@@ -11,15 +11,7 @@ import CommentComponent from "../components/comment.js";
 import {RenderPosition, render} from "../utils/render.js";
 
 const createFilmPopup = (card) => {
-  const {title, duration, poster, description, rating, comments, isInWatchList, isInWatchedList, isInFavoriteList} = card;
-
-  const originalTitle = `The Great Flamarion`;
-  const directorName = `Anthony Mann`;
-  const writers = `Anne Wigton, Heinz Herald, Richard Weil`;
-  const actors = `Erich von Stroheim, Mary Beth Hughes, Dan Duryea`;
-  const releaseDate = `30 March 1945`;
-  const country = `USA`;
-  const ageRaiting = `18+`;
+  const {title, original, rating, ageCategory, poster, duration, description, comments, isInWatchList, isInWatchedList, isInFavoriteList, director, writersNames, actorsNames, countryBirth, year} = card;
 
   return (`<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -29,14 +21,14 @@ const createFilmPopup = (card) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="${title}">
-          <p class="film-details__age">${ageRaiting}</p>
+          <img class="film-details__poster-img" src="./${poster}" alt="${title}">
+          <p class="film-details__age">${ageCategory}</p>
         </div>
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">Original: ${originalTitle}</p>
+              <p class="film-details__title-original">Original: ${original}</p>
             </div>
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
@@ -45,19 +37,19 @@ const createFilmPopup = (card) => {
           <table class="film-details__table">
             <tr class="film-details__row">
               <td class="film-details__term">Director</td>
-              <td class="film-details__cell">${directorName}</td>
+              <td class="film-details__cell">${director}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
+              <td class="film-details__cell">${writersNames}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
+              <td class="film-details__cell">${actorsNames}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${releaseDate}</td>
+              <td class="film-details__cell">${year}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -65,7 +57,7 @@ const createFilmPopup = (card) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
-              <td class="film-details__cell">${country}</td>
+              <td class="film-details__cell">${countryBirth}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Genres</td>
