@@ -8,6 +8,8 @@ import {RenderPosition, render, remove} from "../utils/render.js";
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 
+
+
 // export const renderPopupsAndCards = (filmList, card) => {
 //   const siteFooterElement = document.querySelector(`.footer`);
 
