@@ -9,9 +9,32 @@ import {nanoid} from "nanoid";
 
 import CommentComponent from "../components/comment.js";
 import {RenderPosition, render} from "../utils/render.js";
+import {formatRuntime, formatFullReleaseDate} from "../utils/common.js";
+
+
+const createGenreMarkup = (genre) => {
+  return (`<span class="film-details__genre">${genre}</span>`);
+};
+
+const createGenreTemplate = (genres) => {
+  const name = genres.length > 1 ? `Genres` : `Genre`;
+  const genreMarkup = genres.map((it, i) => createGenreMarkup(it, i === 0)).join(`\n`);
+  return (`<tr class="film-details__row">
+  <td class="film-details__term">${name}</td>
+  <td class="film-details__cell">
+    <span class="film-details__genre">${genreMarkup}</span>
+</tr>`);
+};
+
+const addSpace = (arr) => {
+  for (let i = 1; i < arr.length; i++) {
+    arr[i] = ` ` + arr[i];
+  }
+  return arr;
+};
 
 const createFilmPopup = (card) => {
-  const {title, original, rating, ageCategory, poster, duration, description, comments, isInWatchList, isInWatchedList, isInFavoriteList, director, writersNames, actorsNames, countryBirth, year} = card;
+  const {title, original, rating, ageCategory, poster, duration, description, comment, isInWatchList, isInWatchedList, isInFavoriteList, director, writersNames, actorsNames, countryBirth, year, genre} = card;
 
   return (`<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -22,7 +45,7 @@ const createFilmPopup = (card) => {
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
           <img class="film-details__poster-img" src="./${poster}" alt="${title}">
-          <p class="film-details__age">${ageCategory}</p>
+          <p class="film-details__age">${ageCategory}+</p>
         </div>
         <div class="film-details__info">
           <div class="film-details__info-head">
@@ -41,31 +64,25 @@ const createFilmPopup = (card) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writersNames}</td>
+              <td class="film-details__cell">${addSpace(writersNames)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actorsNames}</td>
+              <td class="film-details__cell">${addSpace(actorsNames)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${year}</td>
+              <td class="film-details__cell">${formatFullReleaseDate(year)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${formatRuntime(duration)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
               <td class="film-details__cell">${countryBirth}</td>
             </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Genres</td>
-              <td class="film-details__cell">
-                <span class="film-details__genre">Drama</span>
-                <span class="film-details__genre">Film-Noir</span>
-                <span class="film-details__genre">Mystery</span></td>
-            </tr>
+            ${createGenreTemplate(genre)}
           </table>
           <p class="film-details__film-description">
             ${description}
@@ -83,7 +100,7 @@ const createFilmPopup = (card) => {
     </div>
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comment.length}</span></h3>
         <ul class="film-details__comments-list">
         </ul>
         <div class="film-details__new-comment">
@@ -216,7 +233,7 @@ export default class Popup extends AbstractSmartComponent {
 
   _renderComments() {
     const commentsList = this.getElement().querySelector(`.film-details__comments-list`);
-    const comments = this._card.comments;
+    const comments = this._card.comment;
 
     comments.forEach((comment) => {
       render(commentsList, new CommentComponent(comment), RenderPosition.BEFOREEND);

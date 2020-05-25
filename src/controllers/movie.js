@@ -47,10 +47,9 @@ export default class MovieController {
     //   });
 
 
-    this._commentsModel.setComments(movie.comments);
+    this._commentsModel.setComments(movie.comment);
 
     const comments = this._commentsModel.getComments();
-    console.log(comments);
 
     const onPosterClick = () => {
       this._onViewChange();

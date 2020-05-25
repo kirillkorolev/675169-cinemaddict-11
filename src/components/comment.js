@@ -4,8 +4,8 @@ import {encode} from "he";
 import {formatCommentDate} from "../utils/common.js";
 
 const createCommentMarkup = (commentItem) => {
-  const {id, emotion, author, comment, date} = commentItem;
 
+  const {id, emotion, author, comment, date} = commentItem;
   const commentText = encode(comment);
 
   return (`<li class="film-details__comment" id="${id}">
