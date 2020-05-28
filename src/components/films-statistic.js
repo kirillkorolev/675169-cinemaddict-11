@@ -5,10 +5,10 @@ const createFilmsStatictic = (ammount) => {
 };
 
 export default class FilmsStatistic extends AbstractComponent {
-  constructor(ammount) {
+  constructor(moviesModel) {
     super();
 
-    this._ammount = ammount;
+    this._ammount = moviesModel.getMoviesAll().length;
   }
 
   getTemplate() {

@@ -37,7 +37,7 @@ render(siteMainElement, filmsSectionComponent, RenderPosition.BEFOREEND);
 
 
 const FILM_COUNT = 11;
-const FilmsStatisticElement = new FilmsStatistic(FILM_COUNT);
+const FilmsStatisticElement = new FilmsStatistic(moviesModel);
 
 const siteStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 render(siteStatisticElement, FilmsStatisticElement, RenderPosition.BEFOREEND);
@@ -49,6 +49,7 @@ render(siteStatisticElement, FilmsStatisticElement, RenderPosition.BEFOREEND);
 api.getMovies()
   .then((movies) => {
     moviesModel.setMovies(movies);
+    console.log(movies[0]);
     pageController.render();
   });
 
