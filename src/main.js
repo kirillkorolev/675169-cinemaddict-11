@@ -3,7 +3,6 @@ import {generateAmmountInfo} from "./mock/user-status";
 
 import PageController from "./controllers/page.js";
 import StatusComponent from "./components/user-status.js";
-import MenuComponent from "./components/menu.js";
 
 import FilterController from "./controllers/filter.js";
 
@@ -26,21 +25,23 @@ const moviesModel = new MoviesModel();
 
 render(siteHeaderElement, new StatusComponent(44), RenderPosition.BEFOREEND);
 const filterController = new FilterController(siteMainElement, moviesModel);
+
 filterController.render();
-render(siteMainElement, new MenuComponent(), RenderPosition.BEFOREEND);
 
 const api = new API(AUTHORIZATION);
 
 const filmsSectionComponent = new FilmsComponent();
 
 const pageController = new PageController(filmsSectionComponent, moviesModel, api);
+render(siteMainElement, filmsSectionComponent, RenderPosition.BEFOREEND);
+
 
 const FILM_COUNT = 11;
 const FilmsStatisticElement = new FilmsStatistic(FILM_COUNT);
 
 const siteStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
 render(siteStatisticElement, FilmsStatisticElement, RenderPosition.BEFOREEND);
-render(siteMainElement, filmsSectionComponent, RenderPosition.BEFOREEND);
+
 
 // const statistics = new StatisticsComponent(moviesModel._movies);
 // render(siteMainElement, statistics, RenderPosition.BEFOREEND);

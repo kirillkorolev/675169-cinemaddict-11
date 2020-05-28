@@ -7,6 +7,8 @@ import {RenderPosition, render, replace, remove} from "../utils/render.js";
 
 import CommentsModel from "../models/comments.js";
 
+import MovieModel from "../models/movie.js";
+
 const siteFooterElement = document.querySelector(`.footer`);
 
 const Mode = {
@@ -61,23 +63,34 @@ export default class MovieController {
 
     const updateWatchList = (evt) => {
       evt.preventDefault();
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        isInWatchList: !movie.isInWatchList,
-      }));
+      // this._onDataChange(this, movie, Object.assign({}, movie, {
+      //   isInWatchList: !movie.isInWatchList,
+      // }));
+
+      const newMovie = MovieModel.clone(movie);
+      newMovie.isInWatchList = !newMovie.isInWatchList;
+
+      this._onDataChange(this, movie, newMovie);
     };
 
     const updateWatchedList = (evt) => {
       evt.preventDefault();
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        isInWatchedList: !movie.isInWatchedList,
-      }));
+      // this._onDataChange(this, movie, Object.assign({}, movie, {
+      //   isInWatchedList: !movie.isInWatchedList,
+      // }));
+      const newMovie = MovieModel.clone(movie);
+      newMovie.isInWatchedList = !newMovie.isInWatchedList;
+      this._onDataChange(this, movie, newMovie);
     };
 
     const updateFavoriteList = (evt) => {
       evt.preventDefault();
-      this._onDataChange(this, movie, Object.assign({}, movie, {
-        isInFavoriteList: !movie.isInFavoriteList,
-      }));
+      // this._onDataChange(this, movie, Object.assign({}, movie, {
+      //   isInFavoriteList: !movie.isInFavoriteList,
+      // }));
+      const newMovie = MovieModel.clone(movie);
+      newMovie.isInFavoriteList = !newMovie.isInFavoriteList;
+      this._onDataChange(this, movie, newMovie);
     };
 
     this._popupComponent.setOnCloseButtonClickHandler(() => {

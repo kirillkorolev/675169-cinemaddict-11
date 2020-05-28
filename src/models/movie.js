@@ -37,10 +37,10 @@ export default class Movie {
       "id": this.id,
       "film_info": {
         "title": this.title,
-        "original": this.original,
+        "alternative_title": this.original,
         "total_rating": this.rating,
         "poster": this.poster,
-        "age_raiting": this.ageCategory,
+        "age_rating": this.ageCategory,
         "director": this.director,
         "writers": this.writersNames,
         "actors": this.actorsNames,
@@ -58,10 +58,12 @@ export default class Movie {
         "favorite": this.isInFavoriteList,
       },
       "comments": this.comment.map((it) => it.id),
+      // "comments": this.comment,
     };
   }
 
   static clone(data) {
+    console.log(data);
     return new Movie(data.toRAW());
   }
 }

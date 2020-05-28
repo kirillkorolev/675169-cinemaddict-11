@@ -9,6 +9,7 @@ import RatedFilmsComponent from "../components/rated-films.js";
 import CommentedFilmsComponent from "../components/commented-films.js"
 import NoFilmsComponent from "../components/no-films.js";
 
+
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 const EXTRAS_COUNT = 2;
@@ -74,7 +75,8 @@ export default class PageController {
   render() {
     const movies = this._moviesModel.getMovies();
     const siteMainElement = document.querySelector(`.main`);
-    render(siteMainElement, this._sortComponent, RenderPosition.BEFOREEND);
+    render(siteMainElement, this._sortComponent, RenderPosition.AFTERBEGIN);
+
 
     if (movies.length > 0) {
       let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
