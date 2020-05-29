@@ -37,6 +37,8 @@ const siteStatisticElement = siteFooterElement.querySelector(`.footer__statistic
 // const statistics = new StatisticsComponent(moviesModel._movies);
 // render(siteMainElement, statistics, RenderPosition.BEFOREEND);
 
+
+
 api.getMovies()
   .then((movies) => {
     moviesModel.setMovies(movies);
