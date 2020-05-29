@@ -1,8 +1,8 @@
-import {randomInteger} from "../utils";
+// import {randomInteger} from "../utils";
 
-const watchedMoviesAmmount = randomInteger(0, 100);
+// const watchedMoviesAmmount = randomInteger(0, 100);
 
-const getRaiting = (raiting) => {
+export const getRaiting = (raiting) => {
   let stat = ``;
   if (raiting === 0) {
     stat = ``;
@@ -14,7 +14,7 @@ const getRaiting = (raiting) => {
   return stat;
 };
 
-export const generateAmmountInfo = () => {
+export const generateAmmountInfo = (watchedMoviesAmmount) => {
   return {
     status: getRaiting(watchedMoviesAmmount)
   };

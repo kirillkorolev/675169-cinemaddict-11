@@ -1,4 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
+import {createStatus} from "../utils/common.js";
 
 const createUserStatusTemplate = (info) => {
   const {status} = info;
@@ -10,13 +11,15 @@ const createUserStatusTemplate = (info) => {
 };
 
 export default class Status extends AbstractComponent {
-  constructor(info) {
+  constructor(moviesModel) {
     super();
 
-    this._info = info;
+    this._ammount = moviesModel.getMovies().filter((elem) => {
+      return elem.isInWatchedList === true;
+    }).length;
   }
 
   getTemplate() {
-    return createUserStatusTemplate(this._info);
+    return createUserStatusTemplate(createStatus(this._ammount));
   }
 }

@@ -1,5 +1,8 @@
 import moment from "moment";
 
+const MAX_TEXT_LENGTH = 140;
+const SHOWN_NEXT_LENGTH = 139;
+
 export const formatRuntime = (runtime) => {
   const duration = moment.duration(runtime, `minutes`);
 
@@ -12,6 +15,12 @@ export const formatRuntime = (runtime) => {
 };
 
 export const formatYear = (date) => moment(date).year();
+
+export const formatFullReleaseDate = (data) => {
+  const utc = moment.utc(data).toDate();
+
+  return moment(utc).local().format(`DD MMMM YYYY`);
+};
 
 export const formatCommentDate = (data) => {
   const utc = moment.utc(data).toDate();
@@ -32,4 +41,23 @@ export const formatCommentDate = (data) => {
     result = moment(utc).local().format(`YYYY/MM/DD HH:mm`);
   }
   return result;
+};
+
+export const createDescription = (fullText) => {
+  if (fullText.length >= MAX_TEXT_LENGTH) {
+    fullText = fullText.slice(0, SHOWN_NEXT_LENGTH) + `...`;
+  }
+  return fullText;
+};
+
+export const createStatus = (ammount) => {
+  let stat = ``;
+  if (ammount === 0) {
+    stat = ``;
+  } else if (ammount <= 10 && ammount >= 1) {
+    stat = `Fan`;
+  } else if (ammount > 10) {
+    stat = `Movie buff`;
+  }
+  return stat;
 };
