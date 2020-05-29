@@ -8,7 +8,7 @@ export default class FilmsStatistic extends AbstractComponent {
   constructor(moviesModel) {
     super();
 
-    this._ammount = moviesModel.getMoviesAll().length;
+    this._ammount = moviesModel.getMovies().length;
   }
 
   getTemplate() {

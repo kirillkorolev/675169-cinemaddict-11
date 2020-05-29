@@ -20,6 +20,7 @@ export default class Movie {
     this.isInWatchList = Boolean(data[`user_details`][`watchlist`]);
     this.isInWatchedList = Boolean(data[`user_details`][`already_watched`]);
     this.isInFavoriteList = Boolean(data[`user_details`][`favorite`]);
+    this.watchidngDate = data[`user_details`][`watching_date`];
 
     this.comment = comments;
   }
@@ -56,14 +57,13 @@ export default class Movie {
         "watchlist": this.isInWatchList,
         "already_watched": this.isInWatchedList,
         "favorite": this.isInFavoriteList,
+        "watching_date": this.watchidngDate,
       },
       "comments": this.comment.map((it) => it.id),
-      // "comments": this.comment,
     };
   }
 
   static clone(data) {
-    console.log(data);
     return new Movie(data.toRAW(), data.comment);
   }
 }

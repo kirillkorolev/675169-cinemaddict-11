@@ -219,4 +219,16 @@ export default class PageController {
 
     this._renderLoadMoreButton(sortedMovies);
   }
+
+  showLoadingMeesage() {
+    const title = this._container.getElement().querySelector(`.films-list__title`);
+    title.classList.remove(`visually-hidden`);
+    title.textContent = `Loading...`;
+  }
+
+  hideLoadingMessage() {
+    const title = this._container.getElement().querySelector(`.films-list__title`);
+    title.textContent = `All movies. Upcoming`;
+    title.classList.add(`visually-hidden`);
+  }
 }

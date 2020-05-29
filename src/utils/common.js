@@ -49,3 +49,15 @@ export const createDescription = (fullText) => {
   }
   return fullText;
 };
+
+export const createStatus = (ammount) => {
+  let stat = ``;
+  if (ammount === 0) {
+    stat = ``;
+  } else if (ammount <= 10 && ammount >= 1) {
+    stat = `Fan`;
+  } else if (ammount > 10) {
+    stat = `Movie buff`;
+  }
+  return stat;
+};
