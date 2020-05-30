@@ -154,9 +154,9 @@ export default class Popup extends AbstractSmartComponent {
     return createFilmPopup(this._card);
   }
 
-  clearComments() {
-    // this.getElement().querySelector(`.film-details__comments-list`).innerHTML = ``;
-  }
+  // clearComments() {
+  //   // this.getElement().querySelector(`.film-details__comments-list`).innerHTML = ``;
+  // }
 
   recoveryListeners() {
     this.setOnCloseButtonClickHandler(this._closeButtonClickHandler);
@@ -258,11 +258,11 @@ export default class Popup extends AbstractSmartComponent {
   _parseFormData(formData) {
     return {
       id: nanoid(),
-      avatar: this.getElement().querySelector(`.film-details__new-comment img`).name,
-      name: nameList[randomElement(nameList)],
-      time: moment().format(`HH:mm`),
-      date: moment().format(`YYYY/MM/DD`),
-      text: formData.get(`comment`),
+      emotion: this.getElement().querySelector(`.film-details__new-comment img`).name,
+      author: nameList[randomElement(nameList)],
+      // time: moment().format(`HH:mm`),
+      date: new Date().toISOString(),
+      comment: formData.get(`comment`),
     };
   }
 

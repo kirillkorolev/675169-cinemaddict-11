@@ -1,12 +1,9 @@
 import PopupComponent from "../components/popup.js";
 import FilmCardComponent from "../components/film-card.js";
-// import CommentComponent from "../components/comment.js";
-
 
 import {RenderPosition, render, replace, remove} from "../utils/render.js";
 
 import CommentsModel from "../models/comments.js";
-
 import MovieModel from "../models/movie.js";
 
 const siteFooterElement = document.querySelector(`.footer`);
@@ -17,10 +14,12 @@ const Mode = {
 };
 
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, api) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
+
+    this._api = api;
 
     this._mode = Mode.DEFAULT;
 
@@ -30,7 +29,6 @@ export default class MovieController {
     this._commentsModel = new CommentsModel();
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-
     this._onCommentsChange = this._onCommentsChange.bind(this);
   }
 
@@ -40,14 +38,6 @@ export default class MovieController {
 
     this._cardComponent = new FilmCardComponent(movie);
     this._popupComponent = new PopupComponent(movie);
-
-
-    // api.getComments()
-    //   .then((movie.id) => {
-    //     this._commentsModel.setMovies(movies);
-    //     pageController.render();
-    //   });
-
 
     this._commentsModel.setComments(movie.comment);
 
@@ -63,10 +53,6 @@ export default class MovieController {
 
     const updateWatchList = (evt) => {
       evt.preventDefault();
-      // this._onDataChange(this, movie, Object.assign({}, movie, {
-      //   isInWatchList: !movie.isInWatchList,
-      // }));
-
       const newMovie = MovieModel.clone(movie);
       newMovie.isInWatchList = !newMovie.isInWatchList;
 
@@ -75,9 +61,6 @@ export default class MovieController {
 
     const updateWatchedList = (evt) => {
       evt.preventDefault();
-      // this._onDataChange(this, movie, Object.assign({}, movie, {
-      //   isInWatchedList: !movie.isInWatchedList,
-      // }));
       const newMovie = MovieModel.clone(movie);
       newMovie.isInWatchedList = !newMovie.isInWatchedList;
       this._onDataChange(this, movie, newMovie);
@@ -85,9 +68,6 @@ export default class MovieController {
 
     const updateFavoriteList = (evt) => {
       evt.preventDefault();
-      // this._onDataChange(this, movie, Object.assign({}, movie, {
-      //   isInFavoriteList: !movie.isInFavoriteList,
-      // }));
       const newMovie = MovieModel.clone(movie);
       newMovie.isInFavoriteList = !newMovie.isInFavoriteList;
       this._onDataChange(this, movie, newMovie);
@@ -134,6 +114,12 @@ export default class MovieController {
       this._commentsModel.removeComment(oldComment.id);
     } else if (oldComment === null) {
       this._commentsModel.createComment(newComment);
+      // this._api.createComment(newComment)
+      //   .then((commentModel) => {
+      //     this._commentsModel.createComment(commentModel);
+      //     this._commentsModel.createComment(newComment);
+      //   }
+
     }
 
     const newMovie = Object.assign({}, movie, {
@@ -146,7 +132,7 @@ export default class MovieController {
   _removePopup() {
     siteFooterElement.removeChild(this._popupComponent.getElement());
 
-    this._popupComponent.clearComments();
+    // this._popupComponent.clearComments();
     this._popupComponent.clearAvatarInComment();
     this._mode = Mode.DEFAULT;
   }

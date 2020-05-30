@@ -6,7 +6,7 @@ import MovieController from "../controllers/movie.js";
 import {RenderPosition, render, remove, replace} from "../utils/render.js";
 
 import RatedFilmsComponent from "../components/rated-films.js";
-import CommentedFilmsComponent from "../components/commented-films.js"
+import CommentedFilmsComponent from "../components/commented-films.js";
 import NoFilmsComponent from "../components/no-films.js";
 
 
@@ -184,10 +184,6 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldData, newData) {
-    // const isSuccess = this._moviesModel.updateMovies(oldData.id, newData);
-    // if (isSuccess) {
-    //   movieController.render(newData);
-    // }
     this._api.updateMovie(oldData.id, newData)
       .then((movieModel) => {
         const isSuccess = this._moviesModel.updateMovies(oldData.id, movieModel);
@@ -220,7 +216,7 @@ export default class PageController {
     this._renderLoadMoreButton(sortedMovies);
   }
 
-  showLoadingMeesage() {
+  showLoadingMessage() {
     const title = this._container.getElement().querySelector(`.films-list__title`);
     title.classList.remove(`visually-hidden`);
     title.textContent = `Loading...`;
