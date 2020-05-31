@@ -9,6 +9,12 @@ import RatedFilmsComponent from "../components/rated-films.js";
 import CommentedFilmsComponent from "../components/commented-films.js";
 import NoFilmsComponent from "../components/no-films.js";
 
+import {AUTHORIZATION, END_POINT} from "../const.js";
+
+import API from "../api.js";
+
+const movieApi = new API(END_POINT, AUTHORIZATION);
+
 
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
@@ -16,7 +22,7 @@ const EXTRAS_COUNT = 2;
 
 const renderMovies = (movieElement, movies, onDataChange, onViewChange) => {
   return movies.map((movie) => {
-    const movieController = new MovieController(movieElement, onDataChange, onViewChange);
+    const movieController = new MovieController(movieElement, onDataChange, onViewChange, movieApi);
 
     movieController.render(movie);
     return movieController;
@@ -75,6 +81,7 @@ export default class PageController {
   render() {
     const movies = this._moviesModel.getMovies();
     const siteMainElement = document.querySelector(`.main`);
+
     render(siteMainElement, this._sortComponent, RenderPosition.AFTERBEGIN);
 
 

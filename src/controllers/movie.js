@@ -96,7 +96,7 @@ export default class MovieController {
     this._popupComponent.setOnNewCommentAddHandler(() => {
       const data = this._popupComponent.getData();
 
-      if (data.text && data.avatar) {
+      if (data.comment && data.emotion) {
         this._onCommentsChange(movie, null, data);
       }
     });
@@ -113,18 +113,17 @@ export default class MovieController {
     if (newComment === null) {
       this._commentsModel.removeComment(oldComment.id);
     } else if (oldComment === null) {
-      this._commentsModel.createComment(newComment);
-      // this._api.createComment(newComment)
-      //   .then((commentModel) => {
-      //     this._commentsModel.createComment(commentModel);
-      //     this._commentsModel.createComment(newComment);
-      //   }
-
+      // this._commentsModel.createComment(newComment);
+      this._api.createComment(movie, newComment)
+        .then((commentModel) => {
+          this._commentsModel.createComment(commentModel);
+        });
     }
 
     const newMovie = Object.assign({}, movie, {
       comments: this._commentsModel.getComments(),
     });
+
 
     this._onDataChange(this, movie, newMovie);
   }

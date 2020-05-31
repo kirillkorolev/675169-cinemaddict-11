@@ -13,9 +13,7 @@ import FilterController from "./controllers/filter.js";
 import MoviesModel from "./models/movies.js";
 import {RenderPosition, render} from "./utils/render.js";
 
-
-const AUTHORIZATION = `Basic er883jdzbdw`;
-const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
+import {AUTHORIZATION, END_POINT} from "./const.js";
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);

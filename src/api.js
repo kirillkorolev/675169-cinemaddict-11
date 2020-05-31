@@ -54,6 +54,7 @@ const API = class {
   }
 
   createComment(movie, comment) {
+    console.log(movie.id, comment);
     return this._load({
       url: `comments/${movie.id}`,
       method: Method.POST,
