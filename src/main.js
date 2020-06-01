@@ -15,6 +15,7 @@ import {RenderPosition, render} from "./utils/render.js";
 
 import {AUTHORIZATION, END_POINT} from "./const.js";
 
+
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const siteFooterElement = document.querySelector(`.footer`);

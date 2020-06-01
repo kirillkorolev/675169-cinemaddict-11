@@ -2,7 +2,7 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import {createElement} from "../utils/render.js";
 
 import {randomElement} from "../utils.js";
-import {nameList} from "../mock/comment.js";
+import {nameList} from "../const.js";
 
 import moment from "moment";
 import {nanoid} from "nanoid";
@@ -255,12 +255,17 @@ export default class Popup extends AbstractSmartComponent {
     this._commentDeleteClickHandler = handler;
   }
 
+  setOnAddingErrors(id) {
+    //const deleteButton = evt.target.closest(`.film-details__comment-delete`);
+    const deleteButton = this.getElement().querySelector(`#${id}`);
+    console.log(deleteButton);
+  }
+
   _parseFormData(formData) {
     return {
       id: nanoid(),
       emotion: this.getElement().querySelector(`.film-details__new-comment img`).name,
       author: nameList[randomElement(nameList)],
-      // time: moment().format(`HH:mm`),
       date: new Date().toISOString(),
       comment: formData.get(`comment`),
     };
