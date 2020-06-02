@@ -1,10 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-
-export const SortType = {
-  DEFAULT: `default`,
-  DATE_DOWN: `date-down`,
-  RATING_DOWN: `raiting-down`,
-};
+import {SortType} from "../const.js";
 
 const createSortMenuTemplate = () => {
   return (`<ul class="sort">

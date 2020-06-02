@@ -6,13 +6,10 @@ import {RenderPosition, render, replace, remove} from "../utils/render.js";
 import CommentsModel from "../models/comments.js";
 import MovieModel from "../models/movie.js";
 import Comment from "../models/comment.js";
+import {shake} from "../utils/common.js";
+import {Mode} from "../const.js";
 
 const siteFooterElement = document.querySelector(`.footer`);
-
-const Mode = {
-  DEFAULT: `default`,
-  OPENEDPOPUP: `opened`,
-};
 
 export default class MovieController {
   constructor(container, onDataChange, onViewChange, api) {
@@ -46,8 +43,6 @@ export default class MovieController {
     this._commentsModel.setComments(movie.comment);
 
     const comments = this._commentsModel.getComments();
-
-
 
     const onPosterClick = () => {
       this._onViewChange();
@@ -102,7 +97,14 @@ export default class MovieController {
     this._popupComponent.setOnNewCommentAddHandler(() => {
       const data = this._popupComponent.getData();
 
-      if (data.comment && data.emotion) {
+      const textArea = this._popupComponent.getElement().querySelector(`textarea`);
+      const form = this._popupComponent.getElement().querySelector(`.film-details__inner`);
+
+      if (data.comment === `` || data.emotion === ``) {
+        textArea.style.border = `1px solid red`;
+        shake(form);
+      } else {
+        textArea.style.border = ``;
         this._onCommentsChange(movie, null, new Comment(data));
       }
     });
@@ -120,19 +122,18 @@ export default class MovieController {
 
       this._api.deleteComment(oldComment.id)
         .then(() => {
-          console.log(this._popupComponent.getElement().querySelector(`#${oldComment.id}`));
-
           this._commentsModel.removeComment(oldComment.id);
           this._movieModel.comment = this._commentsModel.getComments();
           this.render(movie);
+        })
+        .catch((evt) => {
+          this._popupComponent.removeDisablingFromDelete(evt);
         });
+
     } else if (oldComment === null) {
       this._api.createComment(movie, newComment)
         .then((commentModel) => {
-
-
           this._commentsModel.createComment(commentModel);
-
           this._movieModel.comment = this._commentsModel.getComments();
           this.render(movie);
         });
@@ -141,8 +142,6 @@ export default class MovieController {
 
   _removePopup() {
     siteFooterElement.removeChild(this._popupComponent.getElement());
-
-    // this._popupComponent.clearComments();
     this._popupComponent.clearAvatarInComment();
     this._mode = Mode.DEFAULT;
   }

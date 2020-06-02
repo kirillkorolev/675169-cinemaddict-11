@@ -1,10 +1,7 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {createElement} from "../utils/render.js";
-
-import {randomElement} from "../utils.js";
+import {randomElement} from "../utils/common.js";
 import {nameList} from "../const.js";
-
-import moment from "moment";
 import {nanoid} from "nanoid";
 
 import CommentComponent from "../components/comment.js";
@@ -154,10 +151,6 @@ export default class Popup extends AbstractSmartComponent {
     return createFilmPopup(this._card);
   }
 
-  // clearComments() {
-  //   // this.getElement().querySelector(`.film-details__comments-list`).innerHTML = ``;
-  // }
-
   recoveryListeners() {
     this.setOnCloseButtonClickHandler(this._closeButtonClickHandler);
     this._setOnEmojiClickHandler();
@@ -248,6 +241,8 @@ export default class Popup extends AbstractSmartComponent {
 
         const index = evt.target.closest(`.film-details__comment`).id;
 
+        evt.target.textContent = `Deleting…`;
+        evt.target.setAttribute(`disabled`, `true`);
         handler(index);
       });
     });
@@ -255,10 +250,9 @@ export default class Popup extends AbstractSmartComponent {
     this._commentDeleteClickHandler = handler;
   }
 
-  setOnAddingErrors(id) {
-    //const deleteButton = evt.target.closest(`.film-details__comment-delete`);
-    const deleteButton = this.getElement().querySelector(`#${id}`);
-    console.log(deleteButton);
+  removeDisablingFromDelete(evt) {
+    evt.target.textContent = `Delete`;
+    evt.target.setAttribute(`disabled`, `false`);
   }
 
   _parseFormData(formData) {

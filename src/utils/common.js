@@ -2,6 +2,7 @@ import moment from "moment";
 
 const MAX_TEXT_LENGTH = 140;
 const SHOWN_NEXT_LENGTH = 139;
+const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export const formatRuntime = (runtime) => {
   const duration = moment.duration(runtime, `minutes`);
@@ -61,3 +62,14 @@ export const createStatus = (ammount) => {
   }
   return stat;
 };
+
+export const shake = (element) => {
+  element.classList.add(`shake`);
+
+  setTimeout(() => {
+    element.classList.remove(`shake`);
+
+  }, SHAKE_ANIMATION_TIMEOUT);
+};
+
+export const randomElement = (arr) => Math.floor(Math.random() * arr.length);

@@ -35,7 +35,7 @@ export default class Filter extends AbstractComponent {
   }
 
   setFilterChangeHandler(handler) {
-    this.getElement().addEventListener(`click`, (evt) => {
+    this.getElement().querySelector(`.main-navigation__items`).addEventListener(`click`, (evt) => {
       const filterName = getFilterNameById(evt.target.id);
       handler(filterName);
 

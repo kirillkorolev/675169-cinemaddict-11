@@ -1,12 +1,6 @@
 import Movie from "./models/movie.js";
 import Comment from "./models/comment.js";
-
-const Method = {
-  GET: `GET`,
-  POST: `POST`,
-  PUT: `PUT`,
-  DELETE: `DELETE`
-};
+import {Method} from "./const.js";
 
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
@@ -54,7 +48,6 @@ const API = class {
   }
 
   createComment(movie, comment) {
-    console.log(movie.id, comment);
     return this._load({
       url: `comments/${movie.id}`,
       method: Method.POST,
