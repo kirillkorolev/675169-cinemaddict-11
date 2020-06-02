@@ -62,7 +62,6 @@ api.getMovies()
         filmsSectionComponent.hide();
         pageController.hide();
       } else {
-
         statisticButton.classList.remove(`main-navigation__item--active`);
         statisticsComponent.hide();
         filmsSectionComponent.show();

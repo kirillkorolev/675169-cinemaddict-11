@@ -34,8 +34,9 @@ export default class Statistics extends AbstractSmartComponent {
     this._status = 0;
     this._duration = [];
 
+    console.log(this._movies);
 
-    this._renderChart();
+    this._renderChart(this._getGenres(this._movies).genre, this._getGenres(this._movies).label);
   }
 
   getTemplate() {
@@ -47,7 +48,6 @@ export default class Statistics extends AbstractSmartComponent {
 
     // const status = createStatus(this._movies);
     // const duration = this._getWatchedMoviesDuration(this._duration);
-
 
     const topGenre = watchedMovies.length ? this._getMoviesAmountByGenre(watchedMovies)[0].genre : ``;
 
@@ -78,20 +78,19 @@ export default class Statistics extends AbstractSmartComponent {
   </section>`);
   }
 
-  _renderChart() {
+  _renderChart(labels, values) {
     const BAR_HEIGHT = 50;
     const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
 
-    // Обязательно рассчитайте высоту canvas, она зависит от количества элементов диаграммы
     statisticCtx.height = BAR_HEIGHT * 5;
 
     return new Chart(statisticCtx, {
       plugins: [ChartDataLabels],
       type: `horizontalBar`,
       data: {
-        labels: [`Sci-Fi`, `Animation`, `Fantasy`, `Comedy`, `TV Series`],
+        labels,
         datasets: [{
-          data: [11, 8, 7, 4, 3],
+          values,
           backgroundColor: `#ffe800`,
           hoverBackgroundColor: `#ffe800`,
           anchor: `start`
@@ -193,6 +192,7 @@ export default class Statistics extends AbstractSmartComponent {
         }
 
         const newInterval = target.dataset.id;
+
         this._rerender(newInterval);
       });
   }
@@ -200,7 +200,36 @@ export default class Statistics extends AbstractSmartComponent {
   _rerender(interval) {
     const movies = this._moviesModel.getMovies();
     this._movies = this._getMoviesByDate(movies, interval);
-    this._renderChart();
+
+    this._labels = this._getGenres(this._movies).labels;
+    this._values = this._getGenres(this._movies).values;
+
+    this._renderChart(this._labels, this._values);
+  }
+
+  recoveryListeners() {
+    this._changeIntervalHandler();
+  }
+
+  _getGenres(movies) {
+    const genres = {};
+    movies.forEach((movieItem) => {
+
+      movieItem.genre.forEach((item) => {
+        if (Object.keys(genres).includes(item)) {
+          genres[item] += 1;
+        } else {
+          genres[item] = 1;
+        }
+      });
+    });
+
+    const genresSorting = Object.entries(genres).sort((a, b) => b[1] - a[1]);
+
+    return {
+      labels: genresSorting.map((entries) => entries[0]),
+      values: genresSorting.map((entries) => entries[1])
+    };
   }
 
   _getMoviesByDate(movies, interval) {
