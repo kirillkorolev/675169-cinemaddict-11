@@ -56,7 +56,7 @@ api.getMovies()
     const statisticButton = siteMainElement.querySelector(`.main-navigation__additional`);
 
     statisticButton.addEventListener(`click`, () => {
-      if (!statisticButton.classList.contains(`.main-navigation__item--active`)) {
+      if (!statisticButton.classList.contains(`main-navigation__item--active`)) {
         statisticButton.classList.add(`main-navigation__item--active`);
         statisticsComponent.show();
         filmsSectionComponent.hide();

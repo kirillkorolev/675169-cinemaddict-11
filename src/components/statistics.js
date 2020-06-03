@@ -90,7 +90,7 @@ export default class Statistics extends AbstractSmartComponent {
       data: {
         labels,
         datasets: [{
-          values,
+          data: values,
           backgroundColor: `#ffe800`,
           hoverBackgroundColor: `#ffe800`,
           anchor: `start`
@@ -203,6 +203,8 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._labels = this._getGenres(this._movies).labels;
     this._values = this._getGenres(this._movies).values;
+
+    console.log(this._labels, this._values);
 
     this._renderChart(this._labels, this._values);
   }
