@@ -1,6 +1,7 @@
 import AbstractComponent from "./abstract-component.js";
 import {SortType} from "../const.js";
 
+
 const createSortMenuTemplate = () => {
   return (`<ul class="sort">
   <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button sort__button--active">Sort by default</a></li>
