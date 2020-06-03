@@ -243,16 +243,15 @@ export default class Popup extends AbstractSmartComponent {
 
         evt.target.textContent = `Deleting…`;
         evt.target.setAttribute(`disabled`, `true`);
-        handler(index);
+        handler(index, () => {
+          evt.target.textContent = `Delete`;
+          evt.target.setAttribute(`disabled`, `false`);
+        });
+
       });
     });
 
     this._commentDeleteClickHandler = handler;
-  }
-
-  removeDisablingFromDelete(evt) {
-    evt.target.textContent = `Delete`;
-    evt.target.setAttribute(`disabled`, `false`);
   }
 
   _parseFormData(formData) {

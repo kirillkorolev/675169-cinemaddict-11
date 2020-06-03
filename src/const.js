@@ -43,3 +43,13 @@ export const Method = {
   PUT: `PUT`,
   DELETE: `DELETE`
 };
+
+export const YEAR = 1970;
+
+export const FILTER_ID_PREFIX = `filter__`;
+
+export const HIDDEN_CLASS = `visually-hidden`;
+
+export const MAX_TEXT_LENGTH = 140;
+export const SHOWN_NEXT_LENGTH = 139;
+export const SHAKE_ANIMATION_TIMEOUT = 600;

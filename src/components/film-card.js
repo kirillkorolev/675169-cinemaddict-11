@@ -11,7 +11,7 @@ const showGenre = (arr) => {
   }
 
   return genre;
-}
+};
 
 const createFilmCardTemplate = (filmCard) => {
   const {id, title, rating, year, poster, duration, genre, description, isInWatchList, isInWatchedList, isInFavoriteList, comment} = filmCard;

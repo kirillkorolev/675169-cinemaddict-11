@@ -89,9 +89,9 @@ export default class MovieController {
 
     this._cardComponent.setOnPosterClickHandler(onPosterClick);
 
-    this._popupComponent.setOnCommentDeleteClickHandler((index) => {
+    this._popupComponent.setOnCommentDeleteClickHandler((index, errorCallback) => {
       const deletedComment = comments.find((comment) => comment.id === index);
-      this._onCommentsChange(movie, deletedComment, null);
+      this._onCommentsChange(movie, deletedComment, null, errorCallback);
     });
 
     this._popupComponent.setOnNewCommentAddHandler(() => {
@@ -117,7 +117,7 @@ export default class MovieController {
     }
   }
 
-  _onCommentsChange(movie, oldComment, newComment) {
+  _onCommentsChange(movie, oldComment, newComment, errorCallback) {
     if (newComment === null) {
 
       this._api.deleteComment(oldComment.id)
@@ -126,8 +126,8 @@ export default class MovieController {
           this._movieModel.comment = this._commentsModel.getComments();
           this.render(movie);
         })
-        .catch((evt) => {
-          this._popupComponent.removeDisablingFromDelete(evt);
+        .catch(() => {
+          errorCallback();
         });
 
     } else if (oldComment === null) {

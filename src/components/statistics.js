@@ -2,7 +2,7 @@ import AbstractSmartComponent from "./abstract-smart-component.js";
 import {createStatus} from "../utils/common.js";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import {StatisticInterval} from "../const.js";
+import {StatisticInterval, YEAR} from "../const.js";
 
 const createIntervalMarkup = () => {
   return (`<form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -20,16 +20,16 @@ const createIntervalMarkup = () => {
 </form>`);
 };
 
-
 export default class Statistics extends AbstractSmartComponent {
   constructor(moviesModel) {
     super();
 
     this._moviesModel = moviesModel;
-    this._movies = this._moviesModel.getMovies();
-
     this._activeInterval = StatisticInterval.ALL;
+    this._movies = this._getMoviesByDate(this._moviesModel.getMovies(), this._activeInterval);
+
     this._changeIntervalHandler();
+    this._chart = null;
 
     this._status = 0;
     this._duration = [];
@@ -42,10 +42,6 @@ export default class Statistics extends AbstractSmartComponent {
     });
     const status = createStatus(watchedMovies.length);
     const duration = this._getWatchedMoviesDuration(watchedMovies);
-
-    // const status = createStatus(this._movies);
-    // const duration = this._getWatchedMoviesDuration(this._duration);
-
     const topGenre = watchedMovies.length ? this._getMoviesAmountByGenre(watchedMovies)[0].genre : ``;
 
     return (`<section class="statistic">
@@ -76,13 +72,16 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _renderChart(labels, values) {
-    console.log(labels, values);
+    if (this._chart) {
+      this._chart.destroy();
+    }
+
     const BAR_HEIGHT = 50;
     const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
 
     statisticCtx.height = BAR_HEIGHT * 5;
 
-    return new Chart(statisticCtx, {
+    this._chart = new Chart(statisticCtx, {
       plugins: [ChartDataLabels],
       type: `horizontalBar`,
       data: {
@@ -202,8 +201,6 @@ export default class Statistics extends AbstractSmartComponent {
     this._labels = this._getGenres(this._movies).labels;
     this._values = this._getGenres(this._movies).values;
 
-    console.log(this._labels, this._values);
-
     this._renderChart(this._labels, this._values);
   }
 
@@ -233,12 +230,11 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _getMoviesByDate(movies, interval) {
-    let dateFrom = new Date();
-    const dateTo = new Date();
+    const dateFrom = new Date();
 
-    console.log(interval, StatisticInterval.WEEK);
     switch (interval) {
       case StatisticInterval.ALL:
+        dateFrom.setFullYear(YEAR);
         break;
       case StatisticInterval.TODAY:
         dateFrom.setDate(dateFrom.getDate() - 1);
@@ -253,13 +249,6 @@ export default class Statistics extends AbstractSmartComponent {
         dateFrom.setFullYear(dateFrom.getFullYear() - 1);
         break;
     }
-
-    // console.log(dateFrom, dateTo);
-
-    // console.log(movies.filter((movieItem) => {
-    //   console.log(movieItem.watchidngDate, dateFrom.toISOString());
-    //   return movieItem.isInWatchedList && movieItem.watchidngDate >= dateFrom.toISOString();
-    // }));
 
     return movies.filter((movieItem) => movieItem.isInWatchedList && movieItem.watchidngDate >= dateFrom.toISOString());
   }

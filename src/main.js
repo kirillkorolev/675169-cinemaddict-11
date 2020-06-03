@@ -1,7 +1,7 @@
 import API from "./api.js";
 
 import {RenderPosition, render} from "./utils/render.js";
-import {AUTHORIZATION, END_POINT} from "./const.js";
+import {AUTHORIZATION, END_POINT, SortType, FilterType} from "./const.js";
 
 import StatusComponent from "./components/user-status.js";
 import FilmsComponent from "./components/films.js";
@@ -61,13 +61,16 @@ api.getMovies()
         statisticsComponent.show();
         filmsSectionComponent.hide();
         pageController.hide();
+
+        sortComponent.markDefault();
+        pageController._onSortTypeChange(SortType.DEFAULT);
+        filterController._onFilterChange(FilterType.ALL);
       } else {
         statisticButton.classList.remove(`main-navigation__item--active`);
         statisticsComponent.hide();
         filmsSectionComponent.show();
         pageController.show();
       }
-
     });
   });
 

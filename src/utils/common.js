@@ -1,8 +1,5 @@
 import moment from "moment";
-
-const MAX_TEXT_LENGTH = 140;
-const SHOWN_NEXT_LENGTH = 139;
-const SHAKE_ANIMATION_TIMEOUT = 600;
+import {MAX_TEXT_LENGTH, SHAKE_ANIMATION_TIMEOUT, SHOWN_NEXT_LENGTH} from "../const.js";
 
 export const formatRuntime = (runtime) => {
   const duration = moment.duration(runtime, `minutes`);
