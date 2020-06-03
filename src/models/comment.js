@@ -7,7 +7,7 @@ export default class Comment {
     this.date = data[`date`];
   }
 
-  toRaw() {
+  toRAW() {
     return {
       "id": this.id,
       "emotion": this.emotion,

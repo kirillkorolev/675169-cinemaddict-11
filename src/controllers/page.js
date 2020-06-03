@@ -1,22 +1,20 @@
 import LoadMoreButtonComponent from "../components/load-more-button.js";
+import RatedFilmsComponent from "../components/rated-films.js";
+import CommentedFilmsComponent from "../components/commented-films.js";
+import NoFilmsComponent from "../components/no-films.js";
 
-import SortComponent, {SortType} from "../components/sort.js";
 import MovieController from "../controllers/movie.js";
 
 import {RenderPosition, render, remove, replace} from "../utils/render.js";
+import {AUTHORIZATION, END_POINT, SHOWING_FILMS_COUNT_ON_START, SHOWING_FILMS_COUNT_BY_BUTTON, EXTRAS_COUNT, SortType} from "../const.js";
 
-import RatedFilmsComponent from "../components/rated-films.js";
-import CommentedFilmsComponent from "../components/commented-films.js"
-import NoFilmsComponent from "../components/no-films.js";
+import API from "../api.js";
 
-
-const SHOWING_FILMS_COUNT_ON_START = 5;
-const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
-const EXTRAS_COUNT = 2;
+const movieApi = new API(END_POINT, AUTHORIZATION);
 
 const renderMovies = (movieElement, movies, onDataChange, onViewChange) => {
   return movies.map((movie) => {
-    const movieController = new MovieController(movieElement, onDataChange, onViewChange);
+    const movieController = new MovieController(movieElement, onDataChange, onViewChange, movieApi);
 
     movieController.render(movie);
     return movieController;
@@ -44,7 +42,7 @@ const getSortedFilms = (films, sortType) => {
 
 
 export default class PageController {
-  constructor(container, moviesModel, api) {
+  constructor(container, moviesModel, api, sortComponent) {
 
     this._container = container;
     this._moviesModel = moviesModel;
@@ -53,7 +51,7 @@ export default class PageController {
     this._showedMovieControllers = [];
     this._showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
     this._loadMoreButtonComponent = new LoadMoreButtonComponent();
-    this._sortComponent = new SortComponent();
+    this._sortComponent = sortComponent;
 
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
@@ -64,19 +62,18 @@ export default class PageController {
     this._moviesModel.setFilterChangeHandler(this._onFilterChange);
   }
 
-  // hide() {
-  //   this._container.hide();
-  // }
+  hide() {
+    this._container.hide();
+    this._sortComponent.hide();
+  }
 
-  // show() {
-  //   this._container.show();
-  // }
+  show() {
+    this._container.show();
+    this._sortComponent.show();
+  }
 
   render() {
     const movies = this._moviesModel.getMovies();
-    const siteMainElement = document.querySelector(`.main`);
-    render(siteMainElement, this._sortComponent, RenderPosition.AFTERBEGIN);
-
 
     if (movies.length > 0) {
       let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
@@ -184,10 +181,6 @@ export default class PageController {
   }
 
   _onDataChange(movieController, oldData, newData) {
-    // const isSuccess = this._moviesModel.updateMovies(oldData.id, newData);
-    // if (isSuccess) {
-    //   movieController.render(newData);
-    // }
     this._api.updateMovie(oldData.id, newData)
       .then((movieModel) => {
         const isSuccess = this._moviesModel.updateMovies(oldData.id, movieModel);
@@ -220,7 +213,7 @@ export default class PageController {
     this._renderLoadMoreButton(sortedMovies);
   }
 
-  showLoadingMeesage() {
+  showLoadingMessage() {
     const title = this._container.getElement().querySelector(`.films-list__title`);
     title.classList.remove(`visually-hidden`);
     title.textContent = `Loading...`;

@@ -1,6 +1,18 @@
 import AbstractComponent from "./abstract-component.js";
 import {formatRuntime, formatYear, createDescription} from "../utils/common.js";
 
+const showGenre = (arr) => {
+  let genre = ``;
+
+  if (arr.length === 0) {
+    genre = ``;
+  } else {
+    genre = arr[0];
+  }
+
+  return genre;
+};
+
 const createFilmCardTemplate = (filmCard) => {
   const {id, title, rating, year, poster, duration, genre, description, isInWatchList, isInWatchedList, isInFavoriteList, comment} = filmCard;
 
@@ -10,7 +22,7 @@ const createFilmCardTemplate = (filmCard) => {
   <p class="film-card__info">
     <span class="film-card__year">${formatYear(year)}</span>
     <span class="film-card__duration">${formatRuntime(duration)}</span>
-    <span class="film-card__genre">${genre[0]}</span>
+    <span class="film-card__genre">${showGenre(genre)}</span>
   </p>
   <img src="./${poster}" alt="${title}" class="film-card__poster">
   <p class="film-card__description">${createDescription(description)}</p>

@@ -1,6 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-
-const FILTER_ID_PREFIX = `filter__`;
+import {FILTER_ID_PREFIX} from "../const.js";
 
 const getFilterNameById = (id) => {
   return id.substring(FILTER_ID_PREFIX.length);
@@ -35,7 +34,7 @@ export default class Filter extends AbstractComponent {
   }
 
   setFilterChangeHandler(handler) {
-    this.getElement().addEventListener(`click`, (evt) => {
+    this.getElement().querySelector(`.main-navigation__items`).addEventListener(`click`, (evt) => {
       const filterName = getFilterNameById(evt.target.id);
       handler(filterName);
 

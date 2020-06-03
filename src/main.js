@@ -1,43 +1,44 @@
 import API from "./api.js";
 
+import {RenderPosition, render} from "./utils/render.js";
+import {AUTHORIZATION, END_POINT, SortType, FilterType} from "./const.js";
+
 import StatusComponent from "./components/user-status.js";
 import FilmsComponent from "./components/films.js";
 import FilmsStatistic from "./components/films-statistic.js";
 import StatisticsComponent from "./components/statistics.js";
+import SortComponent from "./components/sort.js";
+import HeaderProfileComponent from "./components/header-profile.js";
 
 import PageController from "./controllers/page.js";
 import FilterController from "./controllers/filter.js";
 
 import MoviesModel from "./models/movies.js";
-import {RenderPosition, render} from "./utils/render.js";
-
-const AUTHORIZATION = `Basic er883jdzbdw`;
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const siteFooterElement = document.querySelector(`.footer`);
 
 const moviesModel = new MoviesModel();
-
-render(siteHeaderElement, new StatusComponent(moviesModel), RenderPosition.BEFOREEND);
 const filterController = new FilterController(siteMainElement, moviesModel);
+const sortComponent = new SortComponent();
 
 filterController.render();
 
-const api = new API(AUTHORIZATION);
+render(siteMainElement, sortComponent, RenderPosition.BEFOREEND);
 
+const api = new API(END_POINT, AUTHORIZATION);
+
+const headerProfileComponent = new HeaderProfileComponent();
 const filmsSectionComponent = new FilmsComponent();
 
-const pageController = new PageController(filmsSectionComponent, moviesModel, api);
-pageController.showLoadingMeesage();
+render(siteHeaderElement, headerProfileComponent, RenderPosition.BEFOREEND);
+
+const pageController = new PageController(filmsSectionComponent, moviesModel, api, sortComponent);
+pageController.showLoadingMessage();
 render(siteMainElement, filmsSectionComponent, RenderPosition.BEFOREEND);
 
 const siteStatisticElement = siteFooterElement.querySelector(`.footer__statistics`);
-
-// const statistics = new StatisticsComponent(moviesModel._movies);
-// render(siteMainElement, statistics, RenderPosition.BEFOREEND);
-
-
 
 api.getMovies()
   .then((movies) => {
@@ -45,7 +46,31 @@ api.getMovies()
     pageController.hideLoadingMessage();
 
     pageController.render();
-    render(siteStatisticElement, new FilmsStatistic(moviesModel), RenderPosition.BEFOREEND);
-  });
 
+    render(headerProfileComponent.getElement(), new StatusComponent(moviesModel), RenderPosition.AFTERBEGIN);
+    const statisticsComponent = new StatisticsComponent(moviesModel);
+    render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+    statisticsComponent.hide();
+    render(siteStatisticElement, new FilmsStatistic(moviesModel), RenderPosition.BEFOREEND);
+
+    const statisticButton = siteMainElement.querySelector(`.main-navigation__additional`);
+
+    statisticButton.addEventListener(`click`, () => {
+      if (!statisticButton.classList.contains(`main-navigation__item--active`)) {
+        statisticButton.classList.add(`main-navigation__item--active`);
+        statisticsComponent.show();
+        filmsSectionComponent.hide();
+        pageController.hide();
+
+        sortComponent.markDefault();
+        pageController._onSortTypeChange(SortType.DEFAULT);
+        filterController._onFilterChange(FilterType.ALL);
+      } else {
+        statisticButton.classList.remove(`main-navigation__item--active`);
+        statisticsComponent.hide();
+        filmsSectionComponent.show();
+        pageController.show();
+      }
+    });
+  });
 
