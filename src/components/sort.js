@@ -50,7 +50,7 @@ export default class SortMenu extends AbstractComponent {
 
 
   markDefault() {
-    let active = this.getElement().querySelector(`.sort__button--active`);
+    const active = this.getElement().querySelector(`.sort__button--active`);
 
     const defaultItem = this.getElement().querySelector(`.sort__button`);
     const sortType = defaultItem.dataset.sortType;

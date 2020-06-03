@@ -140,7 +140,7 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _getWatchedMoviesDuration(movies) {
-    let durationObject = {
+    const durationObject = {
       hours: 0,
       minutes: 0,
     };

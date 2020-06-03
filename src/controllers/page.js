@@ -76,7 +76,7 @@ export default class PageController {
     const movies = this._moviesModel.getMovies();
 
     if (movies.length > 0) {
-      let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
+      const showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
       this._renderMovies(movies.slice(0, showingFilmsCount));
       this._renderLoadMoreButton(movies);
 
