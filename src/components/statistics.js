@@ -8,15 +8,15 @@ const createIntervalMarkup = () => {
   return (`<form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
   <p class="statistic__filters-description">Show stats:</p>
   <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${StatisticInterval.ALL}" value="${StatisticInterval.ALL}" checked>
-  <label for="statistic-${StatisticInterval.ALL}" data-id="all" class="statistic__filters-label">${StatisticInterval.ALL}</label>
+  <label for="statistic-${StatisticInterval.ALL}" data-id="${StatisticInterval.ALL}" class="statistic__filters-label">${StatisticInterval.ALL}</label>
   <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${StatisticInterval.TODAY}" value="${StatisticInterval.TODAY}">
-  <label for="statistic-${StatisticInterval.TODAY}" data-id="today" class="statistic__filters-label">${StatisticInterval.TODAY}</label>
+  <label for="statistic-${StatisticInterval.TODAY}" data-id="${StatisticInterval.TODAY}" class="statistic__filters-label">${StatisticInterval.TODAY}</label>
   <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${StatisticInterval.WEEK}" value="${StatisticInterval.WEEK}">
-  <label for="statistic-${StatisticInterval.WEEK}" data-id="week" class="statistic__filters-label">${StatisticInterval.WEEK}</label>
+  <label for="statistic-${StatisticInterval.WEEK}" data-id="${StatisticInterval.WEEK}" class="statistic__filters-label">${StatisticInterval.WEEK}</label>
   <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${StatisticInterval.MONTH}" value="${StatisticInterval.MONTH}">
-  <label for="statistic-${StatisticInterval.MONTH}" data-id="month" class="statistic__filters-label">${StatisticInterval.MONTH}</label>
+  <label for="statistic-${StatisticInterval.MONTH}" data-id="${StatisticInterval.MONTH}" class="statistic__filters-label">${StatisticInterval.MONTH}</label>
   <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${StatisticInterval.YEAR}" value="${StatisticInterval.YEAR}">
-  <label for="statistic-${StatisticInterval.YEAR}" data-id="year" class="statistic__filters-label">${StatisticInterval.YEAR}</label>
+  <label for="statistic-${StatisticInterval.YEAR}" data-id="${StatisticInterval.YEAR}" class="statistic__filters-label">${StatisticInterval.YEAR}</label>
 </form>`);
 };
 
@@ -33,10 +33,7 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._status = 0;
     this._duration = [];
-
-    console.log(this._movies);
-
-    this._renderChart(this._getGenres(this._movies).genre, this._getGenres(this._movies).label);
+    this._renderChart(this._getGenres(this._movies).labels, this._getGenres(this._movies).values);
   }
 
   getTemplate() {
@@ -79,6 +76,7 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _renderChart(labels, values) {
+    console.log(labels, values);
     const BAR_HEIGHT = 50;
     const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
 
@@ -235,26 +233,34 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _getMoviesByDate(movies, interval) {
-    let dateFrom = new Date(0);
+    let dateFrom = new Date();
     const dateTo = new Date();
 
+    console.log(interval, StatisticInterval.WEEK);
     switch (interval) {
       case StatisticInterval.ALL:
         break;
       case StatisticInterval.TODAY:
-        dateFrom = dateTo.setDate(dateTo.getDate() - 1);
+        dateFrom.setDate(dateFrom.getDate() - 1);
         break;
       case StatisticInterval.WEEK:
-        dateFrom = dateTo.setDate(dateTo.getDate() - 7);
+        dateFrom.setDate(dateFrom.getDate() - 7);
         break;
       case StatisticInterval.MONTH:
-        dateFrom = dateTo.setMonth(dateTo.getMonth() - 1);
+        dateFrom.setMonth(dateFrom.getMonth() - 1);
         break;
       case StatisticInterval.YEAR:
-        dateFrom = dateTo.setFullYear(dateTo.getFullYear() - 1);
+        dateFrom.setFullYear(dateFrom.getFullYear() - 1);
         break;
     }
 
-    return movies.filter((movieItem) => movieItem.isInWatchedList && movieItem.watchingDate >= dateFrom);
+    // console.log(dateFrom, dateTo);
+
+    // console.log(movies.filter((movieItem) => {
+    //   console.log(movieItem.watchidngDate, dateFrom.toISOString());
+    //   return movieItem.isInWatchedList && movieItem.watchidngDate >= dateFrom.toISOString();
+    // }));
+
+    return movies.filter((movieItem) => movieItem.isInWatchedList && movieItem.watchidngDate >= dateFrom.toISOString());
   }
 }
